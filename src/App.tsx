@@ -60,18 +60,30 @@ const callGeminiAPI = async (prompt: string): Promise<string> => {
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "System Malfunction. AI Offline.";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "AI service is currently unavailable. Please check your API key and quota.";
+    return "AI service is currently unavailable.";
   }
 };
 
 // --- Image Assets (Epic Manga Theme) ---
 const mangaArt = {
-  samurai_calendar: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&w=800&q=80", 
-  eye_briefing: "https://images.unsplash.com/photo-1542259681-d2121f53700d?auto=format&fit=crop&w=800&q=80",
-  city_subs: "https://images.unsplash.com/photo-1480796927426-f609979314bd?auto=format&fit=crop&w=800&q=80", 
-  slash_task: "https://images.unsplash.com/photo-1592486630229-97b48c40cb71?auto=format&fit=crop&w=800&q=80",
-  default_avatar: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=200&q=80"
+  samurai_calendar: "/Img/unnamed (1).jpg", 
+  eye_briefing: "/Img/unnamed7.jpg",
+  city_subs: "/Img/unnamed (2).jpg", 
+  slash_task: "/Img/unnamed (3).jpg",
+  default_avatar: "/Img/unnamed (4).jpg"
 };
+
+// Calendar day images - cycle through available images
+const calendarImages = [
+  "/Img/unnamed.jpg",
+  "/Img/unnamed (1).jpg",
+  "/Img/unnamed (2).jpg",
+  "/Img/unnamed (3).jpg",
+  "/Img/unnamed (4).jpg",
+  "/Img/unnamed (5).jpg",
+  "/Img/unnamed (6).jpg",
+  "/Img/unnamed (8).jpg"
+];
 
 // --- Translations ---
 const translations: Record<string, any> = {
@@ -632,8 +644,8 @@ export default function App() {
           </h1>
           <div className="w-12 h-1.5 bg-black mt-1"></div>
         </div>
-        <button onClick={() => setIsProfileModalOpen(true)} className="w-14 h-14 rounded-full border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all relative bg-neutral-200 p-0">
-          <img src={profile.avatar} alt="User" className="w-full h-full object-cover" />
+        <button onClick={() => setIsProfileModalOpen(true)} className="w-14 h-14 rounded-full border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all relative bg-neutral-200 p-0 group">
+          <img src={profile.avatar} alt="User" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" />
         </button>
       </header>
 
@@ -725,11 +737,13 @@ export default function App() {
                   const dateStr = date.toISOString().split('T')[0];
                   const dayTasks = tasks.filter(t => t.dueDate === dateStr);
                   const isToday = new Date().toDateString() === date.toDateString();
+                  const bgImage = calendarImages[date.getDate() % calendarImages.length];
                   return (
                     <button key={idx} onClick={() => { setTaskForm(p => ({ ...p, dueDate: dateStr })); setEditingTask(null); setIsTaskModalOpen(true); }}
-                      className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'bg-black text-white' : 'text-black ' + getMangaPattern(idx)}`}
+                      className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'bg-black text-white' : 'text-black'}`}
                     >
-                      <span className="absolute top-1 left-1.5 text-xs font-black z-10">{date.getDate()}</span>
+                      {!isToday && <img src={bgImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 grayscale group-hover:opacity-60 group-hover:grayscale-0 transition-all" />}
+                      <span className="absolute top-1 left-1.5 text-xs font-black z-10 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">{date.getDate()}</span>
                       {dayTasks.length > 0 && (<div className="absolute bottom-1 right-1 flex flex-col items-end gap-0.5 z-10">{dayTasks.slice(0, 3).map((t) => (<div key={t.id} className={`w-1.5 h-1.5 border border-black ${t.status === 'done' ? 'bg-neutral-600' : 'bg-white'}`}></div>))}</div>)}
                     </button>
                   );
