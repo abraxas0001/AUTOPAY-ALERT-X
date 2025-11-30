@@ -19,17 +19,17 @@ import { useRotatingImages, calendarDateImages } from './imageRotation';
 
 // --- CONFIGURATION ---
 
-// 1. GEMINI API KEY (PASTED HERE)
-const apiKey = "AIzaSyC-_6aJux4CjOEnFJGNbojRtxwvHnAX0O0"; 
+// 1. GEMINI API KEY (FROM ENVIRONMENT)
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
 
-// 2. FIREBASE CONFIGURATION (PASTED HERE)
+// 2. FIREBASE CONFIGURATION (FROM ENVIRONMENT)
 const firebaseConfig = {
-  apiKey: "AIzaSyAbLOoOFG1v0excLQY9FMp7cDAbt9IpqVQ",
-  authDomain: "auto-pay-alert-x-167d2.firebaseapp.com",
-  projectId: "auto-pay-alert-x-167d2",
-  storageBucket: "auto-pay-alert-x-167d2.firebasestorage.app",
-  messagingSenderId: "730892243480",
-  appId: "1:730892243480:web:ed4902bc9b95663986696d"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
