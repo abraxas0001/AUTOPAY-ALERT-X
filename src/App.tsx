@@ -44,7 +44,7 @@ const appId = 'manga-task-manager-v1';
 const callGeminiAPI = async (prompt: string): Promise<string> => {
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -55,7 +55,8 @@ const callGeminiAPI = async (prompt: string): Promise<string> => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("API Error Details:", errorData);
-      throw new Error(`API Error: ${response.status}`);
+      console.error("Full error:", JSON.stringify(errorData, null, 2));
+      throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
     }
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "System Malfunction. AI Offline.";
