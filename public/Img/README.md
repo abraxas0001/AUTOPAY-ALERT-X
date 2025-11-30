@@ -13,6 +13,8 @@ Your images are now organized into specific folders. Simply drop images into the
 5. **`avatars/`** - Profile avatar options
 6. **`modals/`** - Background images for modals (task creation, date details)
 7. **`loading/`** - Loading screen background images
+8. **`top-bar/`** - Unified header background (single image for all sections at 90% opacity)
+9. **`calendar/sub-background/`** - Secondary layer for calendar grid (landscape/portrait folders, 30% opacity)
 
 ## 🔄 How It Works
 

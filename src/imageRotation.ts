@@ -105,6 +105,20 @@ export const calendarPortraitImages = [
   '/Img/calendar/portrait/download (11).jfif',
 ];
 
+// Calendar sub-background images (for the character/overlay layer) - Landscape
+export const calendarSubBackgroundLandscapeImages = [
+  '/Img/calendar/sub-background/landscape/pexels-felix-mittermeier-2832071.jpg',
+  '/Img/calendar/sub-background/landscape/alone-tree-sunset-qe.jpg',
+  '/Img/calendar/sub-background/landscape/Misty Mountain Blossoms.jfif',
+];
+
+// Calendar sub-background images (for the character/overlay layer) - Portrait
+export const calendarSubBackgroundPortraitImages = [
+  '/Img/calendar/sub-background/portrait/download (7).jfif',
+  '/Img/calendar/sub-background/portrait/download (8).jfif',
+  '/Img/calendar/sub-background/portrait/download (9).jfif',
+];
+
 // Subscriptions background images - Landscape (for PC/Laptop)
 export const subscriptionsLandscapeImages = [
   '/Img/subscriptions/landscape/wallpaperflare.com_wallpaper (8).jpg',
@@ -202,6 +216,7 @@ export const useRotatingImages = () => {
     dashboard: getCurrentImage(isLandscape ? dashboardLandscapeImages : dashboardPortraitImages, FALLBACK_IMAGE),
     tasks: getCurrentImage(isLandscape ? tasksLandscapeImages : tasksPortraitImages, FALLBACK_IMAGE),
     calendar: getCurrentImage(isLandscape ? calendarLandscapeImages : calendarPortraitImages, FALLBACK_IMAGE),
+    calendarSubBackground: getCurrentImage(isLandscape ? calendarSubBackgroundLandscapeImages : calendarSubBackgroundPortraitImages, FALLBACK_IMAGE),
     subscriptions: getCurrentImage(isLandscape ? subscriptionsLandscapeImages : subscriptionsPortraitImages, FALLBACK_IMAGE),
     avatar: getCurrentImage(avatarImages, FALLBACK_AVATAR),
     modal: getCurrentImage(modalImages, FALLBACK_IMAGE),

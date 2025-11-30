@@ -696,8 +696,17 @@ export default function App() {
       <div className="absolute inset-0 z-[1] pointer-events-none opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-multiply"></div>
 
       {/* Top Bar */}
-      <header className="relative z-20 bg-white border-b-4 border-black px-6 py-5 flex justify-between items-center shadow-[0_4px_0px_0px_rgba(0,0,0,1)]">
-        <div className="flex flex-col">
+      <header className="relative z-20 bg-white border-b-4 border-black px-6 py-5 flex justify-between items-center shadow-[0_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/Img/top-bar/header-bg.png" 
+            alt="" 
+            className="w-full h-full object-cover opacity-90"
+          />
+        </div>
+        
+        <div className="relative z-10 flex flex-col">
           <h1 className="text-3xl font-black italic tracking-tighter uppercase leading-none transform -skew-x-6 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
             {activeTab === 'dashboard' && t.home}
             {activeTab === 'calendar' && t.cal}
@@ -706,7 +715,7 @@ export default function App() {
           </h1>
           <div className="w-12 h-1.5 bg-black mt-1"></div>
         </div>
-        <button onClick={() => setIsProfileModalOpen(true)} className="w-14 h-14 rounded-full border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all relative bg-neutral-200 p-0 group">
+        <button onClick={() => setIsProfileModalOpen(true)} className="relative z-10 w-14 h-14 rounded-full border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all bg-neutral-200 p-0 group">
           <img src={profile.avatar} alt="User" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" />
         </button>
       </header>
@@ -791,7 +800,7 @@ export default function App() {
         {activeTab === 'calendar' && (
           <div className="space-y-6">
             <div className="bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden min-h-[450px]">
-              <div className="absolute inset-0 z-0"><img src={mangaArt.samurai_calendar} alt="Character" className="w-full h-full object-cover object-top opacity-30 grayscale contrast-150" /><div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div>
+              <div className="absolute inset-0 z-0"><img src={currentRotation.calendarSubBackground} alt="Background" className="w-full h-full object-cover object-top opacity-30 grayscale contrast-150" onError={() => handleImageError('calendarSubBackground')} /><div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div>
               <div className="relative z-10 flex items-center justify-between mb-6 bg-black text-white p-3 shadow-lg transform -skew-x-2">
                 <button onClick={() => { const d = new Date(currentMonth); d.setMonth(d.getMonth()-1); setCurrentMonth(d); }}><ChevronLeft className="w-6 h-6" /></button>
                 <h2 className="text-2xl font-black uppercase tracking-[0.2em]">{currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h2>
@@ -807,7 +816,7 @@ export default function App() {
                   const bgImage = isToday ? currentRotation.todayImage : calendarDateImages[date.getDate() % calendarDateImages.length];
                   return (
                     <button key={idx} onClick={() => { setSelectedDate(dateStr); setIsDateDetailOpen(true); }}
-                      className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'ring-4 ring-blue-500' : 'text-black'}`}
+                      className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'shadow-[0_0_12px_2px_rgba(156,163,175,0.6)]' : 'text-black'}`}
                     >
                       <img src={bgImage} alt="" className={`absolute inset-0 w-full h-full object-cover transition-all ${isToday ? 'opacity-70' : 'opacity-40 grayscale group-hover:opacity-60 group-hover:grayscale-0'}`} />
                       <span className="absolute top-1 left-1.5 text-xs font-black z-10 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">{date.getDate()}</span>
