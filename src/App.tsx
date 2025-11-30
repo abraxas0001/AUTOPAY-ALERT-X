@@ -230,17 +230,6 @@ const SmartButton = ({ onClick, loading, label, className }: { onClick: () => vo
   </button>
 );
 
-const getMangaPattern = (index: number) => {
-  const patterns = [
-    'bg-white', 
-    'bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:3px_3px] opacity-80',
-    'bg-[repeating-linear-gradient(45deg,#f0f0f0_0px,#f0f0f0_1px,transparent_1px,transparent_4px)]',
-    'bg-[radial-gradient(#555_1px,transparent_1px)] [background-size:6px_6px]',
-    'bg-neutral-100',
-  ];
-  return patterns[index % patterns.length];
-};
-
 const PriorityBadge = ({ priority }: { priority: Priority }) => {
   const styles = {
     high: 'bg-black text-white border-black',
