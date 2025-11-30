@@ -704,8 +704,7 @@ export default function App() {
           <div className="space-y-8">
             {/* Briefing */}
             <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)] relative overflow-hidden group min-h-[200px] flex flex-col justify-between">
-               <div className="absolute inset-0 z-0 opacity-40 mix-blend-screen group-hover:opacity-50 transition-opacity duration-1000"><img src={currentRotation.dashboardBanner} alt="Insight" className="w-full h-full object-cover grayscale contrast-125" /></div>
-               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-0"></div>
+               <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-1000"><img src={currentRotation.dashboardBanner} alt="Insight" className="w-full h-full object-cover grayscale" /></div>
                <div className="relative z-10 p-5 flex justify-between items-start">
                  <div className="flex items-center gap-2 text-white"><BrainCircuit className="w-6 h-6" /><h3 className="font-black uppercase tracking-[0.2em] text-lg">{t.brief}</h3></div>
                  {dailyBriefing && <button onClick={() => setDailyBriefing(null)}><X className="w-5 h-5"/></button>}
@@ -793,12 +792,12 @@ export default function App() {
                   const dateStr = date.toISOString().split('T')[0];
                   const dayTasks = tasks.filter(t => t.dueDate === dateStr);
                   const isToday = new Date().toDateString() === date.toDateString();
-                  const bgImage = calendarDateImages[date.getDate() % calendarDateImages.length];
+                  const bgImage = isToday ? currentRotation.todayImage : calendarDateImages[date.getDate() % calendarDateImages.length];
                   return (
                     <button key={idx} onClick={() => { setSelectedDate(dateStr); setIsDateDetailOpen(true); }}
-                      className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'bg-black text-white' : 'text-black'}`}
+                      className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'ring-4 ring-blue-500' : 'text-black'}`}
                     >
-                      {!isToday && <img src={bgImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 grayscale group-hover:opacity-60 group-hover:grayscale-0 transition-all" />}
+                      <img src={bgImage} alt="" className={`absolute inset-0 w-full h-full object-cover transition-all ${isToday ? 'opacity-70' : 'opacity-40 grayscale group-hover:opacity-60 group-hover:grayscale-0'}`} />
                       <span className="absolute top-1 left-1.5 text-xs font-black z-10 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">{date.getDate()}</span>
                       {dayTasks.length > 0 && (<div className="absolute bottom-1 right-1 flex flex-col items-end gap-0.5 z-10">{dayTasks.slice(0, 3).map((t) => (<div key={t.id} className={`w-1.5 h-1.5 border border-black ${t.status === 'done' ? 'bg-neutral-600' : 'bg-white'}`}></div>))}</div>)}
                     </button>
@@ -813,8 +812,7 @@ export default function App() {
         {activeTab === 'subs' && (
           <div className="space-y-6">
             <div className="bg-black text-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-               <div className="absolute inset-0 opacity-30 grayscale transition-opacity duration-1000"><img src={currentRotation.subscriptionsBanner} alt="Background" className="w-full h-full object-cover" /></div>
-               <div className="absolute inset-0 bg-black/50"></div>
+               <div className="absolute inset-0 opacity-60 transition-opacity duration-1000"><img src={currentRotation.subscriptionsBanner} alt="Background" className="w-full h-full object-cover grayscale" /></div>
                <p className="relative z-10 text-xs font-black text-neutral-300 uppercase tracking-[0.3em] mb-1">Total Burn</p>
                <h2 className="relative z-10 text-6xl font-black tracking-tighter text-white drop-shadow-lg">{profile.currency}{totalMonthlyCost.toFixed(0)}</h2>
             </div>

@@ -114,11 +114,6 @@ export const avatarImages = [
 
 // Calendar date tile images (cycle through all)
 export const calendarDateImages = [
-  '/Img/calendar/unnamed.jpg',
-  '/Img/calendar/unnamed (1).jpg',
-  '/Img/calendar/unnamed (5).jpg',
-  '/Img/calendar/unnamed (6).jpg',
-  '/Img/calendar/unnamed (8).jpg',
   '/Img/calendar/download.jpg',
   '/Img/calendar/downlo.jpeg',
   '/Img/calendar/download (2).jfif',
@@ -127,13 +122,22 @@ export const calendarDateImages = [
   '/Img/calendar/download (5).jfif',
   '/Img/calendar/download (5).jpeg',
   '/Img/calendar/download (6).jfif',
-  '/Img/calendar/WALL_2022-06-28_05.02.18.png',
+  '/Img/calendar/download (7).jfif',
+  '/Img/calendar/download (8).jfif',
+  '/Img/calendar/download (9).jfif',
+  '/Img/calendar/download (11).jfif',
   '/Img/calendar/pexels-felix-mittermeier-2832071.jpg',
-  '/Img/calendar/pexels-pixabay-221189.jpg',
-  '/Img/calendar/pexels-pixabay-236950.jpg',
-  '/Img/calendar/alone-tree-sunset-qe.jpg',
-  '/Img/calendar/WallpaperDog-20487402.jpg',
   '/Img/calendar/Misty Mountain Blossoms.jfif',
+  '/Img/calendar/alone-tree-sunset-qe.jpg',
+  '/Img/calendar/unnamed (8).jpg',
+  '/Img/calendar/unnamed7.jpg',
+];
+
+// Today's date images (colorful, not grayscale)
+export const todayImages = [
+  '/Img/calendar/today/pexels-felix-mittermeier-2832071.jpg',
+  '/Img/calendar/today/Misty Mountain Blossoms.jfif',
+  '/Img/calendar/today/alone-tree-sunset-qe.jpg',
 ];
 
 // Banner images for dark sections (Daily Briefing, Stats, etc.)
@@ -191,6 +195,7 @@ export const useRotatingImages = () => {
     tasksBanner: getCurrentImage(tasksBannerImages, FALLBACK_IMAGE),
     calendarBanner: getCurrentImage(calendarBannerImages, FALLBACK_IMAGE),
     subscriptionsBanner: getCurrentImage(subscriptionsBannerImages, FALLBACK_IMAGE),
+    todayImage: getCurrentImage(todayImages, FALLBACK_IMAGE),
     rotationIndex, // For debugging/display
   };
 };
