@@ -700,7 +700,7 @@ export default function App() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="/Img/top-bar/header-bg.png" 
+            src="/Img/top-bar/964122.png" 
             alt="" 
             className="w-full h-full object-cover opacity-90"
           />
@@ -979,9 +979,18 @@ export default function App() {
       }} className="fixed z-[90] w-16 h-16 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 bottom-28 sm:bottom-28 md:bottom-32 lg:bottom-36 right-6 sm:right-6 md:right-8 lg:right-12 xl:right-[calc(50vw-32rem)] bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white texture-pattern-grid border-t-4 border-black p-3 pb-6 sm:p-3 sm:pb-6 md:p-4 md:pb-6 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 min-h-[70px]">
+      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t-4 border-black p-3 pb-6 sm:p-3 sm:pb-6 md:p-4 md:pb-6 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 min-h-[70px] relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/Img/patterns/964122.png" 
+            alt="" 
+            className="w-full h-full object-cover opacity-20"
+          />
+        </div>
+        <div className="absolute inset-0 z-[1] texture-pattern-grid"></div>
         {[ { id: 'dashboard', icon: LayoutDashboard, label: t.home }, { id: 'calendar', icon: CalendarIcon, label: t.cal }, { id: 'tasks', icon: Sword, label: t.tasks }, { id: 'subs', icon: Coins, label: t.subs } ].map(item => (
-          <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`flex flex-col items-center justify-center w-16 py-2 sm:w-16 sm:py-2.5 md:w-20 md:py-3 lg:w-24 lg:py-3.5 border-2 transition-all duration-200 active:scale-90 ${activeTab === item.id ? 'bg-black text-white border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -translate-y-2' : 'text-neutral-400 hover:text-black border-transparent bg-transparent'}`}><item.icon className="w-5 h-5 stroke-[2.5]" /><span className="text-[9px] font-black uppercase tracking-wider mt-1">{item.label}</span></button>
+          <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`relative z-10 flex flex-col items-center justify-center w-16 py-2 sm:w-16 sm:py-2.5 md:w-20 md:py-3 lg:w-24 lg:py-3.5 border-2 transition-all duration-200 active:scale-90 ${activeTab === item.id ? 'bg-black text-white border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -translate-y-2' : 'text-neutral-400 hover:text-black border-transparent bg-transparent'}`}><item.icon className="w-5 h-5 stroke-[2.5]" /><span className="text-[9px] font-black uppercase tracking-wider mt-1">{item.label}</span></button>
         ))}
       </nav>
 
