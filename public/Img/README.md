@@ -14,7 +14,8 @@ Your images are now organized into specific folders. Simply drop images into the
 6. **`modals/`** - Background images for modals (task creation, date details)
 7. **`loading/`** - Loading screen background images
 8. **`top-bar/`** - Unified header background (single image for all sections at 90% opacity)
-9. **`calendar/sub-background/`** - Secondary layer for calendar grid (landscape/portrait folders, 30% opacity)
+9. **`calendar/sub-background/`** - Secondary layer for calendar grid (landscape/portrait folders, 98% opacity)
+10. **`patterns/`** - Minimal texture patterns for white backgrounds (CSS-based, no images needed)
 
 ## 🔄 How It Works
 
@@ -80,5 +81,16 @@ Your images are now organized into specific folders. Simply drop images into the
 - Images are displayed at 20% opacity with gradient overlay
 - Banner images remain in black & white for contrast
 - Background images are shown in full color
+
+## 🎨 Texture Patterns:
+
+The app now includes subtle texture patterns on white backgrounds to maintain visual interest:
+
+- **Paper Pattern** - Used on modals, stats cards, and date detail windows
+- **Grid Pattern** - Applied to navigation bar
+- **Dots Pattern** - Used on calendar day headers and subscription details
+- **Subtle Lines** - Applied to calendar grid background
+
+All patterns are CSS-based (no image files needed) and display at very low opacity to maintain the clean aesthetic while adding depth.
 
 Enjoy your dynamic, ever-changing UI! 🎨✨

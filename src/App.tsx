@@ -738,11 +738,11 @@ export default function App() {
             </div>
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4">
-              <div onClick={() => setActiveTab('tasks')} className="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform hover:bg-neutral-50">
+              <div onClick={() => setActiveTab('tasks')} className="bg-white texture-pattern-paper border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform hover:bg-neutral-50">
                 <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-2">Tasks</p>
                 <div className="flex items-baseline gap-1"><span className="text-5xl font-black">{tasks.filter(t => t.status !== 'done').length}</span><span className="text-sm font-bold text-black border-b-2 border-black">PENDING</span></div>
               </div>
-              <div onClick={() => setShowRemaining(!showRemaining)} className="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform hover:bg-neutral-50">
+              <div onClick={() => setShowRemaining(!showRemaining)} className="bg-white texture-pattern-paper border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform hover:bg-neutral-50">
                 <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-2">{showRemaining ? "DUE NOW" : "TOTAL MONTHLY"}</p>
                 <div className="flex items-baseline gap-1"><span className="text-5xl font-black">{profile.currency}{showRemaining ? remainingDue.toFixed(0) : totalMonthlyCost.toFixed(0)}</span><span className="text-sm font-bold text-black border-b-2 border-black">/MO</span></div>
               </div>
@@ -799,15 +799,15 @@ export default function App() {
         {/* Calendar */}
         {activeTab === 'calendar' && (
           <div className="space-y-6">
-            <div className="bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden min-h-[450px]">
-              <div className="absolute inset-0 z-0"><img src={currentRotation.calendarSubBackground} alt="Background" className="w-full h-full object-cover object-top opacity-30 grayscale contrast-150" onError={() => handleImageError('calendarSubBackground')} /><div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div>
+            <div className="bg-white texture-pattern-subtle-lines border-4 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden min-h-[450px]">
+              <div className="absolute inset-0 z-0"><img src={currentRotation.calendarSubBackground} alt="Background" className="w-full h-full object-cover object-top opacity-[0.98] grayscale contrast-150" onError={() => handleImageError('calendarSubBackground')} /><div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div>
               <div className="relative z-10 flex items-center justify-between mb-6 bg-black text-white p-3 shadow-lg transform -skew-x-2">
                 <button onClick={() => { const d = new Date(currentMonth); d.setMonth(d.getMonth()-1); setCurrentMonth(d); }}><ChevronLeft className="w-6 h-6" /></button>
                 <h2 className="text-2xl font-black uppercase tracking-[0.2em]">{currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h2>
                 <button onClick={() => { const d = new Date(currentMonth); d.setMonth(d.getMonth()+1); setCurrentMonth(d); }}><ChevronRight className="w-6 h-6" /></button>
               </div>
               <div className="relative z-10 grid grid-cols-7 gap-2">
-                {['S','M','T','W','T','F','S'].map((d,i) => ( <div key={i} className="text-center text-xs font-black uppercase text-black bg-white border border-black pb-1">{d}</div> ))}
+                {['S','M','T','W','T','F','S'].map((d,i) => ( <div key={i} className="text-center text-xs font-black uppercase text-black bg-white texture-pattern-dots border border-black pb-1">{d}</div> ))}
                 {calendarDays.map((date, idx) => {
                   if (!date) return <div key={idx}></div>;
                   const dateStr = date.toISOString().split('T')[0];
@@ -864,7 +864,7 @@ export default function App() {
                   </div>
                   
                   {expandedTaskId === sub.id && (
-                    <div className="mx-2 border-x-2 border-b-2 border-black bg-white p-4 text-xs font-mono animate-in slide-in-from-top-2 shadow-inner">
+                    <div className="mx-2 border-x-2 border-b-2 border-black bg-white texture-pattern-dots p-4 text-xs font-mono animate-in slide-in-from-top-2 shadow-inner">
                       <div className="mb-4 border-b border-black/20 pb-2">
                         <div className="flex items-center gap-2 mb-2 text-black font-black uppercase tracking-widest"><History className="w-3 h-3"/> Payment History</div>
                         {subHistory.length > 0 ? (
@@ -899,7 +899,7 @@ export default function App() {
       {isProfileModalOpen && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in">
           <div className="bg-white w-full max-w-md border-4 border-white p-1">
-            <div className="bg-white border-4 border-black p-6">
+            <div className="bg-white texture-pattern-paper border-4 border-black p-6">
               <div className="flex justify-between items-center mb-6 border-b-4 border-black pb-2">
                 <h2 className="font-black text-2xl uppercase italic tracking-tighter transform -skew-x-6">Operator Config</h2>
                 <button onClick={() => setIsProfileModalOpen(false)}><X className="w-8 h-8 stroke-[3]"/></button>
@@ -979,7 +979,7 @@ export default function App() {
       }} className="fixed z-[90] w-16 h-16 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 bottom-28 sm:bottom-28 md:bottom-32 lg:bottom-36 right-6 sm:right-6 md:right-8 lg:right-12 xl:right-[calc(50vw-32rem)] bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t-4 border-black p-3 pb-6 sm:p-3 sm:pb-6 md:p-4 md:pb-6 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 min-h-[70px]">
+      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white texture-pattern-grid border-t-4 border-black p-3 pb-6 sm:p-3 sm:pb-6 md:p-4 md:pb-6 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 min-h-[70px]">
         {[ { id: 'dashboard', icon: LayoutDashboard, label: t.home }, { id: 'calendar', icon: CalendarIcon, label: t.cal }, { id: 'tasks', icon: Sword, label: t.tasks }, { id: 'subs', icon: Coins, label: t.subs } ].map(item => (
           <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`flex flex-col items-center justify-center w-16 py-2 sm:w-16 sm:py-2.5 md:w-20 md:py-3 lg:w-24 lg:py-3.5 border-2 transition-all duration-200 active:scale-90 ${activeTab === item.id ? 'bg-black text-white border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -translate-y-2' : 'text-neutral-400 hover:text-black border-transparent bg-transparent'}`}><item.icon className="w-5 h-5 stroke-[2.5]" /><span className="text-[9px] font-black uppercase tracking-wider mt-1">{item.label}</span></button>
         ))}
@@ -989,7 +989,7 @@ export default function App() {
       {isTaskModalOpen && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in">
           <div className="bg-white w-full max-w-md border-4 border-white p-1">
-             <div className="bg-white border-4 border-black p-6">
+             <div className="bg-white texture-pattern-paper border-4 border-black p-6">
                <div className="flex justify-between items-center mb-6 border-b-4 border-black pb-2"><h2 className="font-black text-2xl uppercase italic">{editingTask ? 'Edit Task' : 'New Task'}</h2><button onClick={() => setIsTaskModalOpen(false)}><X className="w-8 h-8 stroke-[3]"/></button></div>
                <div className="space-y-4">
                  <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Identify Target</label><input value={taskForm.title} onChange={e => setTaskForm({...taskForm, title: e.target.value})} className="w-full h-12 bg-neutral-100 border-2 border-black p-3 font-bold uppercase" placeholder="MISSION OBJECTIVE..." /></div>
@@ -1009,7 +1009,7 @@ export default function App() {
       {/* Sub Modal */}
       {isSubModalOpen && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-           <div className="bg-white w-full max-w-md border-4 border-black p-6">
+           <div className="bg-white texture-pattern-paper w-full max-w-md border-4 border-black p-6">
              <div className="flex justify-between items-center mb-6"><h2 className="font-black text-xl uppercase">New Alert</h2><button onClick={() => setIsSubModalOpen(false)}><X className="w-6 h-6"/></button></div>
              <div className="space-y-4">
                 <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Asset Name</label><input value={subForm.name} onChange={e => setSubForm({...subForm, name: e.target.value})} placeholder="SERVICE NAME (e.g. Netflix)" className="w-full h-12 border-2 border-black p-3 font-bold uppercase"/></div>
@@ -1033,7 +1033,7 @@ export default function App() {
       {/* Date Detail Modal */}
       {isDateDetailOpen && selectedDate && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-2xl border-4 border-black p-6 max-h-[80vh] overflow-y-auto">
+          <div className="bg-white texture-pattern-paper w-full max-w-2xl border-4 border-black p-6 max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6 border-b-4 border-black pb-2">
               <h2 className="font-black text-2xl uppercase italic">Tasks for {new Date(selectedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h2>
               <button onClick={() => setIsDateDetailOpen(false)}><X className="w-8 h-8 stroke-[3]"/></button>

@@ -71,3 +71,47 @@ body {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+
+/* Subtle Texture Patterns for White Backgrounds */
+.texture-pattern-dots {
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.texture-pattern-grid {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.texture-pattern-diagonal {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(0, 0, 0, 0.02) 10px,
+      rgba(0, 0, 0, 0.02) 11px
+    );
+}
+
+.texture-pattern-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+.texture-pattern-paper {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='paper' x='0' y='0' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='10' cy='10' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='30' cy='25' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='50' cy='15' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='70' cy='35' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='90' cy='20' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='20' cy='50' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='40' cy='60' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='60' cy='70' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='80' cy='65' r='0.5' fill='%23000' opacity='0.02'/%3E%3Ccircle cx='15' cy='85' r='0.5' fill='%23000' opacity='0.02'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23paper)'/%3E%3C/svg%3E");
+}
+
+.texture-pattern-subtle-lines {
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.015) 2px,
+      rgba(0, 0, 0, 0.015) 3px
+    );
+}
