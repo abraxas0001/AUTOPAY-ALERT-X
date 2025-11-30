@@ -22,11 +22,22 @@ export const getRotationIndex = (): number => {
 };
 
 // Get current image from a list based on rotation with fallback
-export const getCurrentImage = (images: string[]): string => {
-  if (images.length === 0) return '';
-  const index = getRotationIndex() % images.length;
-  return images[index];
+export const getCurrentImage = (images: string[], fallback: string = ''): string => {
+  // Filter out any undefined or empty strings
+  const validImages = images.filter(img => img && img.length > 0);
+  
+  if (validImages.length === 0) {
+    console.warn('No valid images available, using fallback');
+    return fallback;
+  }
+  
+  const index = getRotationIndex() % validImages.length;
+  return validImages[index];
 };
+
+// Fallback images (always available)
+const FALLBACK_IMAGE = '/Img/dashboard/wallpaperflare.com_wallpaper (4).jpg';
+const FALLBACK_AVATAR = '/Img/avatars/Peace of mind.jpeg';
 
 // Get current image with fallback to next available if missing
 export const getCurrentImageWithFallback = (images: string[]): string => {
@@ -125,18 +136,43 @@ export const calendarDateImages = [
   '/Img/calendar/Misty Mountain Blossoms.jfif',
 ];
 
+// Banner images for dark sections (Daily Briefing, Stats, etc.)
+export const dashboardBannerImages = [
+  '/Img/dashboard/banners/unnamed7.jpg',
+  '/Img/dashboard/banners/887559.jpg',
+  '/Img/dashboard/banners/896302.jpg',
+];
+
+export const tasksBannerImages = [
+  '/Img/tasks/banners/543497.jpg',
+  '/Img/tasks/banners/543509.jpg',
+  '/Img/tasks/banners/468739.jpg',
+];
+
+export const calendarBannerImages = [
+  '/Img/calendar/banners/pexels-felix-mittermeier-2832071.jpg',
+  '/Img/calendar/banners/pexels-pixabay-221189.jpg',
+  '/Img/calendar/banners/alone-tree-sunset-qe.jpg',
+];
+
+export const subscriptionsBannerImages = [
+  '/Img/subscriptions/banners/1017220.jpg',
+  '/Img/subscriptions/banners/43927.jpg',
+  '/Img/subscriptions/banners/527483.jpg',
+];
+
 // Modal background images
 export const modalImages = [
-  '/Img/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
-  '/Img/896302.jpg',
-  '/Img/887559.jpg',
+  '/Img/dashboard/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
+  '/Img/dashboard/896302.jpg',
+  '/Img/dashboard/887559.jpg',
 ];
 
 // Loading screen images
 export const loadingImages = [
-  '/Img/wallpaperflare.com_wallpaper (4).jpg',
-  '/Img/wallpaperflare.com_wallpaper (5).jpg',
-  '/Img/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
+  '/Img/dashboard/wallpaperflare.com_wallpaper (4).jpg',
+  '/Img/dashboard/wallpaperflare.com_wallpaper (5).jpg',
+  '/Img/dashboard/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
 ];
 
 // Hook to get current images with auto-refresh every 30 minutes
@@ -144,13 +180,17 @@ export const useRotatingImages = () => {
   const rotationIndex = getRotationIndex();
   
   return {
-    dashboard: getCurrentImage(dashboardImages),
-    tasks: getCurrentImage(tasksImages),
-    calendar: getCurrentImage(calendarImages),
-    subscriptions: getCurrentImage(subscriptionsImages),
-    avatar: getCurrentImage(avatarImages),
-    modal: getCurrentImage(modalImages),
-    loading: getCurrentImage(loadingImages),
+    dashboard: getCurrentImage(dashboardImages, FALLBACK_IMAGE),
+    tasks: getCurrentImage(tasksImages, FALLBACK_IMAGE),
+    calendar: getCurrentImage(calendarImages, FALLBACK_IMAGE),
+    subscriptions: getCurrentImage(subscriptionsImages, FALLBACK_IMAGE),
+    avatar: getCurrentImage(avatarImages, FALLBACK_AVATAR),
+    modal: getCurrentImage(modalImages, FALLBACK_IMAGE),
+    loading: getCurrentImage(loadingImages, FALLBACK_IMAGE),
+    dashboardBanner: getCurrentImage(dashboardBannerImages, FALLBACK_IMAGE),
+    tasksBanner: getCurrentImage(tasksBannerImages, FALLBACK_IMAGE),
+    calendarBanner: getCurrentImage(calendarBannerImages, FALLBACK_IMAGE),
+    subscriptionsBanner: getCurrentImage(subscriptionsBannerImages, FALLBACK_IMAGE),
     rotationIndex, // For debugging/display
   };
 };

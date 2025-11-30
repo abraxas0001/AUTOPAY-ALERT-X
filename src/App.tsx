@@ -279,6 +279,13 @@ export default function App() {
   const [dailyBriefing, setDailyBriefing] = useState<string | null>(null);
   const [isGeneratingBriefing, setIsGeneratingBriefing] = useState(false);
 
+  // Image error handler - prevents crashes when images are deleted
+  const handleImageError = (imageType: string) => {
+    console.warn(`Image failed to load for ${imageType}, using fallback`);
+    // The fallback is already handled in imageRotation.ts
+    // This just prevents the error from crashing the app
+  };
+
   // Forms
   const [taskForm, setTaskForm] = useState({ 
     title: '', 
@@ -298,12 +305,7 @@ export default function App() {
     customDays: 30
   });
 
-  // Handle image load errors - switch to next available image
-  const handleImageError = (section: 'dashboard' | 'tasks' | 'calendar' | 'subscriptions' | 'avatar') => {
-    console.log(`Image failed to load for ${section}, switching to next...`);
-    // Force a rotation update to try the next image
-    setCurrentRotation(useRotatingImages());
-  };
+
 
   // --- Image Rotation (every 30 minutes) ---
   useEffect(() => {
@@ -702,7 +704,7 @@ export default function App() {
           <div className="space-y-8">
             {/* Briefing */}
             <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)] relative overflow-hidden group min-h-[200px] flex flex-col justify-between">
-               <div className="absolute inset-0 z-0 opacity-40 mix-blend-screen group-hover:opacity-50 transition-opacity duration-500"><img src={mangaArt.eye_briefing} alt="Insight" className="w-full h-full object-cover grayscale contrast-125" /></div>
+               <div className="absolute inset-0 z-0 opacity-40 mix-blend-screen group-hover:opacity-50 transition-opacity duration-1000"><img src={currentRotation.dashboardBanner} alt="Insight" className="w-full h-full object-cover grayscale contrast-125" /></div>
                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-0"></div>
                <div className="relative z-10 p-5 flex justify-between items-start">
                  <div className="flex items-center gap-2 text-white"><BrainCircuit className="w-6 h-6" /><h3 className="font-black uppercase tracking-[0.2em] text-lg">{t.brief}</h3></div>
@@ -811,7 +813,7 @@ export default function App() {
         {activeTab === 'subs' && (
           <div className="space-y-6">
             <div className="bg-black text-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-               <div className="absolute inset-0 opacity-30 grayscale"><img src={mangaArt.city_subs} alt="Background" className="w-full h-full object-cover" /></div>
+               <div className="absolute inset-0 opacity-30 grayscale transition-opacity duration-1000"><img src={currentRotation.subscriptionsBanner} alt="Background" className="w-full h-full object-cover" /></div>
                <div className="absolute inset-0 bg-black/50"></div>
                <p className="relative z-10 text-xs font-black text-neutral-300 uppercase tracking-[0.3em] mb-1">Total Burn</p>
                <h2 className="relative z-10 text-6xl font-black tracking-tighter text-white drop-shadow-lg">{profile.currency}{totalMonthlyCost.toFixed(0)}</h2>
