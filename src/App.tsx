@@ -1034,17 +1034,20 @@ export default function App() {
       }} className="fixed z-[90] w-16 h-16 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 bottom-28 sm:bottom-28 md:bottom-32 lg:bottom-36 right-6 sm:right-6 md:right-8 lg:right-12 xl:right-[calc(50vw-32rem)] bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t-4 border-black py-4 px-2 sm:py-4 sm:px-3 md:py-5 md:px-4 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 min-h-[80px] relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="/Img/download (16).jfif" 
-            alt="" 
-            className="w-full h-full object-cover opacity-65"
-          />
-        </div>
+      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-sm border-t-4 border-black py-3 px-4 sm:py-3 sm:px-6 md:py-4 md:px-8 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-center items-center gap-2 sm:gap-4 md:gap-6 lg:gap-8 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] transition-all duration-300">
         {[ { id: 'dashboard', icon: LayoutDashboard, label: t.home }, { id: 'calendar', icon: CalendarIcon, label: t.cal }, { id: 'tasks', icon: Sword, label: t.tasks }, { id: 'subs', icon: Coins, label: t.subs } ].map(item => (
-          <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`relative z-10 flex flex-col items-center justify-center w-20 py-3 sm:w-20 sm:py-3 md:w-24 md:py-4 lg:w-28 lg:py-4 border-2 transition-all duration-200 active:scale-90 ${activeTab === item.id ? 'bg-black text-white border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -translate-y-2' : 'text-neutral-400 hover:text-black border-transparent bg-transparent'}`}><item.icon className="w-6 h-6 stroke-[2.5]" /><span className="text-[10px] font-black uppercase tracking-wider mt-1.5">{item.label}</span></button>
+          <button 
+            key={item.id} 
+            onClick={() => setActiveTab(item.id as Tab)} 
+            className={`flex flex-col items-center justify-center px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3.5 rounded-lg transition-all duration-300 ease-out group ${
+              activeTab === item.id 
+                ? 'bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] scale-105' 
+                : 'text-neutral-500 hover:text-black hover:bg-neutral-100 hover:scale-105 active:scale-95'
+            }`}
+          >
+            <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5] transition-transform duration-300 ${activeTab === item.id ? '' : 'group-hover:scale-110'}`} />
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider mt-1">{item.label}</span>
+          </button>
         ))}
       </nav>
 
