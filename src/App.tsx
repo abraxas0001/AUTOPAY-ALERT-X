@@ -16,13 +16,13 @@ import {
   query, orderBy, serverTimestamp, setDoc, getDoc
 } from 'firebase/firestore';
 import { useRotatingImages, calendarDateImages } from './imageRotation';
-import { useAIStreaming } from './hooks/useAIStreaming';
-import { AIStreamingDisplay } from './components/AIStreamingDisplay';
 
 // --- CONFIGURATION ---
 
-// FIREBASE CONFIGURATION (FROM ENVIRONMENT)
-// Updated: AI Streaming features enabled
+// 1. GEMINI API KEY (FROM ENVIRONMENT)
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
+
+// 2. FIREBASE CONFIGURATION (FROM ENVIRONMENT)
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -40,7 +40,31 @@ const db = getFirestore(app);
 // App ID logic
 const appId = 'manga-task-manager-v1';
 
-// --- Gemini API Helper removed - now using streaming API ---
+// --- Gemini API Helper ---
+const callGeminiAPI = async (prompt: string): Promise<string> => {
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("API Error Details:", errorData);
+      console.error("Full error:", JSON.stringify(errorData, null, 2));
+      throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    }
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || "System Malfunction. AI Offline.";
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    return "AI service is currently unavailable.";
+  }
+};
 
 // --- Image Assets (Epic Manga Theme) ---
 const mangaArt = {
@@ -280,7 +304,9 @@ export default function App() {
   const [isDateDetailOpen, setIsDateDetailOpen] = useState(false);
 
   // AI State
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [dailyBriefing, setDailyBriefing] = useState<string | null>(null);
+  const [isGeneratingBriefing, setIsGeneratingBriefing] = useState(false);
 
   // Image error handler - prevents crashes when images are deleted
   const handleImageError = (imageType: string) => {
@@ -548,48 +574,32 @@ export default function App() {
       }
   };
 
-  // AI Streaming states
-  const [taskPlanState, taskPlanActions] = useAIStreaming();
-  const [subAnalysisState, subAnalysisActions] = useAIStreaming();
-  const [briefingState, briefingActions] = useAIStreaming();
-
-  // Update forms when streaming completes
-  useEffect(() => {
-    if (taskPlanState.status === 'complete' && taskPlanState.text) {
-      setTaskForm(p => ({...p, description: taskPlanState.text}));
-    }
-  }, [taskPlanState.status, taskPlanState.text]);
-
-  useEffect(() => {
-    if (subAnalysisState.status === 'complete' && subAnalysisState.text) {
-      setSubForm(p => ({...p, description: subAnalysisState.text}));
-    }
-  }, [subAnalysisState.status, subAnalysisState.text]);
-
-  useEffect(() => {
-    if (briefingState.status === 'complete' && briefingState.text) {
-      setDailyBriefing(briefingState.text);
-    }
-  }, [briefingState.status, briefingState.text]);
-
-  const handleAiPlan = () => {
+  const handleAiPlan = async () => {
     if(!taskForm.title.trim()) return;
+    setIsAiGenerating(true);
     const hasContext = taskForm.description.trim().length > 0;
     const prompt = hasContext ? `Enhance and translate into ${profile.language}: "${taskForm.description}"` : `Create a concise checklist for the task: "${taskForm.title}". Language: ${profile.language}`;
-    taskPlanActions.startStreaming(prompt, 'taskPlanning');
+    const text = await callGeminiAPI(prompt);
+    setTaskForm(p => ({...p, description: text}));
+    setIsAiGenerating(false);
   };
 
-  const handleAiSubAnalysis = () => {
+  const handleAiSubAnalysis = async () => {
     if(!subForm.name?.trim()) return;
-    const prompt = `Analyze subscription "${subForm.name}" at ${subForm.cost}. Worth it? Alternatives? Brief. Language: ${profile.language}`;
-    subAnalysisActions.startStreaming(prompt, 'subscriptionAnalysis');
+    setIsAiGenerating(true);
+    const text = await callGeminiAPI(`Analyze subscription "${subForm.name}" at ${subForm.cost}. Worth it? Alternatives? Brief. Language: ${profile.language}`);
+    setSubForm(p => ({...p, description: text}));
+    setIsAiGenerating(false);
   };
 
-  const handleDailyBriefing = () => {
+  const handleDailyBriefing = async () => {
+    setIsGeneratingBriefing(true);
     const pendingCount = tasks.filter(t => t.status !== 'done').length;
     const subTotal = totalMonthlyCost.toFixed(0);
     const prompt = `Briefing: ${pendingCount} tasks, ${profile.currency}${subTotal} monthly burn. 2 sentences. Anime commander style. Language: ${profile.language}`;
-    briefingActions.startStreaming(prompt, 'dailyBriefing');
+    const text = await callGeminiAPI(prompt);
+    setDailyBriefing(text);
+    setIsGeneratingBriefing(false);
   };
 
   const handleTestAlarm = () => {
@@ -772,18 +782,8 @@ export default function App() {
                  {dailyBriefing && <button onClick={() => setDailyBriefing(null)}><X className="w-5 h-5"/></button>}
                </div>
                <div className="relative z-10 p-5 pt-0">
-                 {briefingState.status !== 'idle' && briefingState.status !== 'complete' ? (
-                   <div className="bg-black/20 p-4 rounded">
-                     <AIStreamingDisplay 
-                       state={briefingState} 
-                       context="dailyBriefing" 
-                       onCancel={briefingActions.cancelStreaming} 
-                     />
-                   </div>
-                 ) : dailyBriefing ? (
-                   <p className="font-mono text-sm leading-relaxed whitespace-pre-line animate-in fade-in slide-in-from-bottom-2 border-l-4 border-white pl-4">{dailyBriefing}</p>
-                 ) : (
-                   <button onClick={handleDailyBriefing} disabled={briefingState.isStreaming} className="w-full bg-white text-black py-3 font-black uppercase flex items-center justify-center gap-2 border-2 border-transparent transition-all active:scale-[0.98]">{briefingState.isStreaming ? <Loader2 className="w-5 h-5 animate-spin"/> : <Sparkles className="w-5 h-5"/>}{briefingState.isStreaming ? "ANALYZING..." : "INITIALIZE REPORT"}</button>
+                 {dailyBriefing ? (<p className="font-mono text-sm leading-relaxed whitespace-pre-line animate-in fade-in slide-in-from-bottom-2 border-l-4 border-white pl-4">{dailyBriefing}</p>) : (
+                   <button onClick={handleDailyBriefing} disabled={isGeneratingBriefing} className="w-full bg-white text-black py-3 font-black uppercase flex items-center justify-center gap-2 border-2 border-transparent transition-all active:scale-[0.98]">{isGeneratingBriefing ? <Loader2 className="w-5 h-5 animate-spin"/> : <Sparkles className="w-5 h-5"/>}{isGeneratingBriefing ? "ANALYZING..." : "INITIALIZE REPORT"}</button>
                  )}
                </div>
             </div>
@@ -1066,16 +1066,8 @@ export default function App() {
                    <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Execution Date</label><input type="date" value={taskForm.dueDate} onChange={e => setTaskForm({...taskForm, dueDate: e.target.value})} className="w-full h-12 bg-neutral-100 border-2 border-black p-2 font-mono text-sm"/></div>
                    <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Class</label><select value={taskForm.priority} onChange={e => setTaskForm({...taskForm, priority: e.target.value as Priority})} className="w-full h-12 bg-neutral-100 border-2 border-black p-2 font-bold uppercase"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div>
                  </div>
-                 <div className="flex justify-between items-center mb-1"><label className="block text-[10px] font-black uppercase tracking-widest">Tactical Briefing</label><SmartButton onClick={handleAiPlan} loading={taskPlanState.isStreaming} label={taskForm.description.trim().length > 0 ? "Enhance Intel" : "Auto-Plan"} /></div>
-                 {taskPlanState.status !== 'idle' ? (
-                   <AIStreamingDisplay 
-                     state={taskPlanState} 
-                     context="taskPlanning" 
-                     onCancel={taskPlanActions.cancelStreaming} 
-                   />
-                 ) : (
-                   <textarea value={taskForm.description} onChange={e => setTaskForm({...taskForm, description: e.target.value})} className="w-full h-24 bg-neutral-100 border-2 border-black p-3 font-mono text-xs" placeholder="Enter mission details..."/>
-                 )}
+                 <div className="flex justify-between items-center mb-1"><label className="block text-[10px] font-black uppercase tracking-widest">Tactical Briefing</label><SmartButton onClick={handleAiPlan} loading={isAiGenerating} label={taskForm.description.trim().length > 0 ? "Enhance Intel" : "Auto-Plan"} /></div>
+                 <textarea value={taskForm.description} onChange={e => setTaskForm({...taskForm, description: e.target.value})} className="w-full h-24 bg-neutral-100 border-2 border-black p-3 font-mono text-xs" placeholder="Enter mission details..."/>
                  <div className="flex gap-3"><button onClick={() => saveTask(true)} className="flex-1 border-2 border-black py-3 font-black uppercase">Save & Next</button><button onClick={() => saveTask(false)} className="flex-[2] bg-black text-white border-2 border-black py-3 font-black uppercase hover:bg-neutral-800">Save</button></div>
                </div>
              </div>
@@ -1099,16 +1091,8 @@ export default function App() {
                     <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Next Deduction</label><input type="date" value={subForm.nextBillingDate} onChange={e => setSubForm({...subForm, nextBillingDate: e.target.value})} className="w-full h-12 border-2 border-black p-3 font-mono"/></div>
                     <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Stop Priority</label><select value={subForm.priority} onChange={e => setSubForm({...subForm, priority: e.target.value as Priority})} className="w-full h-12 border-2 border-black p-3 font-bold uppercase"><option value="low">Low (Info)</option><option value="medium">Medium (Notify)</option><option value="high">High (Alarm)</option></select></div>
                 </div>
-                <div className="flex justify-between items-center mb-1"><label className="block text-[10px] font-black uppercase tracking-widest">Intel / Notes</label><SmartButton onClick={handleAiSubAnalysis} loading={subAnalysisState.isStreaming} label="Analyze Value" /></div>
-                {subAnalysisState.status !== 'idle' ? (
-                  <AIStreamingDisplay 
-                    state={subAnalysisState} 
-                    context="subscriptionAnalysis" 
-                    onCancel={subAnalysisActions.cancelStreaming} 
-                  />
-                ) : (
-                  <textarea value={subForm.description || ''} onChange={e => setSubForm({...subForm, description: e.target.value})} className="w-full h-24 bg-neutral-100 border-2 border-black p-3 font-mono text-xs" placeholder="Service details..."/>
-                )}
+                <div className="flex justify-between items-center mb-1"><label className="block text-[10px] font-black uppercase tracking-widest">Intel / Notes</label><SmartButton onClick={handleAiSubAnalysis} loading={isAiGenerating} label="Analyze Value" /></div>
+                <textarea value={subForm.description || ''} onChange={e => setSubForm({...subForm, description: e.target.value})} className="w-full h-24 bg-neutral-100 border-2 border-black p-3 font-mono text-xs" placeholder="Service details..."/>
                 <button onClick={saveSub} className="w-full h-12 bg-black text-white border-2 border-black py-3 font-black uppercase">Save Subscription</button>
              </div>
            </div>
