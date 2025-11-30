@@ -67,11 +67,11 @@ const callGeminiAPI = async (prompt: string): Promise<string> => {
 
 // --- Image Assets (Epic Manga Theme) ---
 const mangaArt = {
-  samurai_calendar: "/Img/unnamed (1).jpg", 
-  eye_briefing: "/Img/unnamed7.jpg",
-  city_subs: "/Img/unnamed (2).jpg", 
-  slash_task: "/Img/unnamed (3).jpg",
-  default_avatar: "/Img/Peace of mind.jpeg"
+  samurai_calendar: "/Img/calendar/unnamed (1).jpg", 
+  eye_briefing: "/Img/dashboard/unnamed7.jpg",
+  city_subs: "/Img/subscriptions/unnamed (2).jpg", 
+  slash_task: "/Img/tasks/unnamed (3).jpg",
+  default_avatar: "/Img/avatars/Peace of mind.jpeg"
 };
 
 // --- Translations ---
@@ -246,7 +246,7 @@ export default function App() {
   // Profile State
   const [profile, setProfile] = useState<UserProfile>({
     name: 'User',
-    avatar: mangaArt.default_avatar,
+    avatar: currentRotation.avatar || mangaArt.default_avatar,
     currency: '$',
     language: 'en',
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -628,26 +628,26 @@ export default function App() {
       {/* Full Page Background Images - Colorful & Rotating */}
       {activeTab === 'dashboard' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.dashboard} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+          <img src={currentRotation.dashboard} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
         </div>
       )}
       {activeTab === 'tasks' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.tasks} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+          <img src={currentRotation.tasks} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
         </div>
       )}
       {activeTab === 'calendar' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.calendar} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+          <img src={currentRotation.calendar} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
         </div>
       )}
       {activeTab === 'subs' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.subscriptions} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+          <img src={currentRotation.subscriptions} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
         </div>
       )}
 
