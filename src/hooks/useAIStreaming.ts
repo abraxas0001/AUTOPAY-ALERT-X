@@ -30,7 +30,7 @@ export function useAIStreaming(): [AIStreamingState, AIStreamingActions] {
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const startStreaming = useCallback((prompt: string, context: string) => {
+  const startStreaming = useCallback((prompt: string, _context: string) => {
     // Create new AbortController for this request
     abortControllerRef.current = new AbortController();
 

@@ -21,10 +21,7 @@ import { AIStreamingDisplay } from './components/AIStreamingDisplay';
 
 // --- CONFIGURATION ---
 
-// 1. GEMINI API KEY (FROM ENVIRONMENT)
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
-
-// 2. FIREBASE CONFIGURATION (FROM ENVIRONMENT)
+// FIREBASE CONFIGURATION (FROM ENVIRONMENT)
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -42,31 +39,7 @@ const db = getFirestore(app);
 // App ID logic
 const appId = 'manga-task-manager-v1';
 
-// --- Gemini API Helper ---
-const callGeminiAPI = async (prompt: string): Promise<string> => {
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("API Error Details:", errorData);
-      console.error("Full error:", JSON.stringify(errorData, null, 2));
-      throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
-    }
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "System Malfunction. AI Offline.";
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return "AI service is currently unavailable.";
-  }
-};
+// --- Gemini API Helper removed - now using streaming API ---
 
 // --- Image Assets (Epic Manga Theme) ---
 const mangaArt = {

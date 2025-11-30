@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import * as fc from 'fast-check';
-import { StatusMessage, AIContext } from './StatusMessage';
-import { StreamStatus } from '../hooks/useAIStreaming';
+import { StatusMessage, type AIContext } from './StatusMessage';
+import type { StreamStatus } from '../hooks/useAIStreaming';
 
 /**
  * Unit tests for status message selection

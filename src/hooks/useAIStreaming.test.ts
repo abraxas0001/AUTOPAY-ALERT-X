@@ -118,8 +118,9 @@ describe('Property 2: State transition completeness', () => {
           expect(status).toBe('complete');
           
           // User interaction should be enabled (isStreaming = false)
-          const isStreaming = status === 'thinking' || status === 'streaming';
-          expect(isStreaming).toBe(false);
+          // When complete, status is neither thinking nor streaming
+          expect(status).not.toBe('thinking');
+          expect(status).not.toBe('streaming');
         }
       ),
       { numRuns: 100 }
@@ -138,7 +139,7 @@ describe('Property 9: Immediate thinking state transition', () => {
     fc.assert(
       fc.property(
         fc.string({ minLength: 1, maxLength: 100 }),
-        (prompt) => {
+        (_prompt) => {
           const startTime = Date.now();
           let status: 'idle' | 'thinking' = 'idle';
           

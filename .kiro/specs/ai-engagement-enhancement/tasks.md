@@ -216,4 +216,5 @@
 
 - [x] 16. Final checkpoint - Ensure all tests pass
 
+
   - Ensure all tests pass, ask the user if questions arise.

@@ -1,6 +1,6 @@
 import React from 'react';
-import { AIStreamingState } from '../hooks/useAIStreaming';
-import { StatusMessage, AIContext } from './StatusMessage';
+import type { AIStreamingState } from '../hooks/useAIStreaming';
+import { StatusMessage, type AIContext } from './StatusMessage';
 import { StreamingText } from './StreamingText';
 import { CancelButton } from './CancelButton';
 

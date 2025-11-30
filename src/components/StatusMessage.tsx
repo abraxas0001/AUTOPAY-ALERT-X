@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
-import { StreamStatus } from '../hooks/useAIStreaming';
+import type { StreamStatus } from '../hooks/useAIStreaming';
 
 export type AIContext = 'taskPlanning' | 'subscriptionAnalysis' | 'dailyBriefing';
 
