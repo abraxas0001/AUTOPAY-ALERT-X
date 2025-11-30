@@ -61,14 +61,22 @@ export async function streamGeminiAPI(options: StreamOptions): Promise<void> {
         
         try {
           const data = JSON.parse(trimmedLine);
-          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          
+          // Handle different response formats
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text ||
+                      data.text ||
+                      data.content?.parts?.[0]?.text;
           
           if (text) {
             onChunk(text);
+          } else if (data.error) {
+            throw new Error(data.error.message || 'API returned an error');
           }
         } catch (parseError) {
-          // Skip lines that aren't valid JSON - this is normal for incomplete chunks
-          console.debug('Skipping incomplete chunk');
+          // Only log actual parse errors, not incomplete chunks
+          if (parseError instanceof SyntaxError && trimmedLine.length > 10) {
+            console.error('Failed to parse response:', trimmedLine.substring(0, 100));
+          }
         }
       }
     }
@@ -77,7 +85,9 @@ export async function streamGeminiAPI(options: StreamOptions): Promise<void> {
     if (buffer.trim()) {
       try {
         const data = JSON.parse(buffer);
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text ||
+                    data.text ||
+                    data.content?.parts?.[0]?.text;
         if (text) {
           onChunk(text);
         }
