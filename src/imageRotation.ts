@@ -13,6 +13,12 @@ export const imageFolders = {
   calendarDates: '/Img/calendar/', // For calendar date tiles
 };
 
+// Detect if device is in landscape mode (PC/Laptop) or portrait mode (Phone/Tablet)
+export const isLandscapeDevice = (): boolean => {
+  if (typeof window === 'undefined') return true; // Default to landscape for SSR
+  return window.innerWidth > window.innerHeight;
+};
+
 // Get rotation index based on 30-minute intervals
 export const getRotationIndex = (): number => {
   const now = new Date();
@@ -52,47 +58,65 @@ export const getCurrentImageWithFallback = (images: string[]): string => {
   return images[currentIndex];
 };
 
-// Dashboard background images
-export const dashboardImages = [
-  '/Img/dashboard/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
-  '/Img/dashboard/wallpaperflare.com_wallpaper (4).jpg',
-  '/Img/dashboard/wallpaperflare.com_wallpaper (5).jpg',
-  '/Img/dashboard/896302.jpg',
-  '/Img/dashboard/887559.jpg',
-  '/Img/dashboard/unnamed7.jpg',
-  '/Img/dashboard/Chinese and japanese oriental painting with golden texture  3d render raster illustration _ Premium AI-generated image.jfif',
+// Dashboard background images - Landscape (for PC/Laptop)
+export const dashboardLandscapeImages = [
+  '/Img/dashboard/landscape/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
+  '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (4).jpg',
+  '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (5).jpg',
+  '/Img/dashboard/landscape/896302.jpg',
+  '/Img/dashboard/landscape/887559.jpg',
 ];
 
-// Tasks background images
-export const tasksImages = [
-  '/Img/tasks/unnamed (3).jpg',
-  '/Img/tasks/543497.jpg',
-  '/Img/tasks/543509.jpg',
-  '/Img/tasks/wallpaperflare.com_wallpaper (6).jpg',
-  '/Img/tasks/468739.jpg',
-  '/Img/tasks/967545.jpg',
-  '/Img/tasks/Backpiece mehendi design incorporating natureinspired elements like trees and birds on a white background for transparent printing.jfif',
+// Dashboard background images - Portrait (for Phone/Tablet)
+export const dashboardPortraitImages = [
+  '/Img/dashboard/portrait/900722.png',
+  '/Img/dashboard/portrait/887559.jpg',
+  '/Img/dashboard/portrait/896302.jpg',
 ];
 
-// Calendar background images
-export const calendarImages = [
-  '/Img/calendar/unnamed (1).jpg',
-  '/Img/calendar/pexels-felix-mittermeier-2832071.jpg',
-  '/Img/calendar/pexels-pixabay-221189.jpg',
-  '/Img/calendar/pexels-pixabay-236950.jpg',
-  '/Img/calendar/alone-tree-sunset-qe.jpg',
-  '/Img/calendar/WallpaperDog-20487402.jpg',
-  '/Img/calendar/Misty Mountain Blossoms.jfif',
+// Tasks background images - Landscape (for PC/Laptop)
+export const tasksLandscapeImages = [
+  '/Img/tasks/landscape/unnamed (3).jpg',
+  '/Img/tasks/landscape/wallpaperflare.com_wallpaper (6).jpg',
+  '/Img/tasks/landscape/468739.jpg',
+  '/Img/tasks/landscape/967545.jpg',
 ];
 
-// Subscriptions background images
-export const subscriptionsImages = [
-  '/Img/subscriptions/unnamed (2).jpg',
-  '/Img/subscriptions/wallpaperflare.com_wallpaper (8).jpg',
-  '/Img/subscriptions/1017220.jpg',
-  '/Img/subscriptions/43927.jpg',
-  '/Img/subscriptions/527483.jpg',
-  '/Img/subscriptions/641988.png',
+// Tasks background images - Portrait (for Phone/Tablet)
+export const tasksPortraitImages = [
+  '/Img/tasks/portrait/652753.png',
+  '/Img/tasks/portrait/Stark man.jfif',
+  '/Img/tasks/portrait/download (14).jfif',
+  '/Img/tasks/portrait/why not you_.jfif',
+];
+
+// Calendar background images - Landscape (for PC/Laptop)
+export const calendarLandscapeImages = [
+  '/Img/calendar/landscape/pexels-felix-mittermeier-2832071.jpg',
+  '/Img/calendar/landscape/alone-tree-sunset-qe.jpg',
+  '/Img/calendar/landscape/Misty Mountain Blossoms.jfif',
+];
+
+// Calendar background images - Portrait (for Phone/Tablet)
+export const calendarPortraitImages = [
+  '/Img/calendar/portrait/download (7).jfif',
+  '/Img/calendar/portrait/download (8).jfif',
+  '/Img/calendar/portrait/download (9).jfif',
+  '/Img/calendar/portrait/download (11).jfif',
+];
+
+// Subscriptions background images - Landscape (for PC/Laptop)
+export const subscriptionsLandscapeImages = [
+  '/Img/subscriptions/landscape/wallpaperflare.com_wallpaper (8).jpg',
+  '/Img/subscriptions/landscape/1017220.jpg',
+  '/Img/subscriptions/landscape/43927.jpg',
+];
+
+// Subscriptions background images - Portrait (for Phone/Tablet)
+export const subscriptionsPortraitImages = [
+  '/Img/subscriptions/portrait/527483.jpg',
+  '/Img/subscriptions/portrait/641988.png',
+  '/Img/subscriptions/portrait/43927.jpg',
 ];
 
 // Avatar options
@@ -182,12 +206,13 @@ export const loadingImages = [
 // Hook to get current images with auto-refresh every 30 minutes
 export const useRotatingImages = () => {
   const rotationIndex = getRotationIndex();
+  const isLandscape = isLandscapeDevice();
   
   return {
-    dashboard: getCurrentImage(dashboardImages, FALLBACK_IMAGE),
-    tasks: getCurrentImage(tasksImages, FALLBACK_IMAGE),
-    calendar: getCurrentImage(calendarImages, FALLBACK_IMAGE),
-    subscriptions: getCurrentImage(subscriptionsImages, FALLBACK_IMAGE),
+    dashboard: getCurrentImage(isLandscape ? dashboardLandscapeImages : dashboardPortraitImages, FALLBACK_IMAGE),
+    tasks: getCurrentImage(isLandscape ? tasksLandscapeImages : tasksPortraitImages, FALLBACK_IMAGE),
+    calendar: getCurrentImage(isLandscape ? calendarLandscapeImages : calendarPortraitImages, FALLBACK_IMAGE),
+    subscriptions: getCurrentImage(isLandscape ? subscriptionsLandscapeImages : subscriptionsPortraitImages, FALLBACK_IMAGE),
     avatar: getCurrentImage(avatarImages, FALLBACK_AVATAR),
     modal: getCurrentImage(modalImages, FALLBACK_IMAGE),
     loading: getCurrentImage(loadingImages, FALLBACK_IMAGE),
@@ -197,5 +222,6 @@ export const useRotatingImages = () => {
     subscriptionsBanner: getCurrentImage(subscriptionsBannerImages, FALLBACK_IMAGE),
     todayImage: getCurrentImage(todayImages, FALLBACK_IMAGE),
     rotationIndex, // For debugging/display
+    isLandscape, // For debugging/display
   };
 };

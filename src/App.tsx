@@ -307,7 +307,7 @@ export default function App() {
 
 
 
-  // --- Image Rotation (every 30 minutes) ---
+  // --- Image Rotation (every 30 minutes) + Orientation Change ---
   useEffect(() => {
     const updateRotation = () => {
       setCurrentRotation(useRotatingImages());
@@ -315,7 +315,19 @@ export default function App() {
     
     // Update every 30 minutes
     const interval = setInterval(updateRotation, 30 * 60 * 1000);
-    return () => clearInterval(interval);
+    
+    // Update on window resize/orientation change
+    const handleResize = () => {
+      updateRotation();
+    };
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
   }, []);
 
   // --- Auth & Data ---
