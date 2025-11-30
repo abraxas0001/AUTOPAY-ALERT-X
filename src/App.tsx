@@ -15,6 +15,7 @@ import {
   getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, 
   query, orderBy, serverTimestamp, setDoc, getDoc
 } from 'firebase/firestore';
+import { useRotatingImages, calendarDateImages } from './imageRotation';
 
 // --- CONFIGURATION ---
 
@@ -72,27 +73,6 @@ const mangaArt = {
   slash_task: "/Img/unnamed (3).jpg",
   default_avatar: "/Img/Peace of mind.jpeg"
 };
-
-// Calendar day images - cycle through available images with new additions
-const calendarImages = [
-  "/Img/unnamed.jpg",
-  "/Img/unnamed (1).jpg",
-  "/Img/unnamed (2).jpg",
-  "/Img/unnamed (3).jpg",
-  "/Img/unnamed (5).jpg",
-  "/Img/unnamed (6).jpg",
-  "/Img/unnamed (8).jpg",
-  "/Img/unnamed7.jpg",
-  "/Img/download.jpg",
-  "/Img/downlo.jpeg",
-  "/Img/download (2).jfif",
-  "/Img/download (3).jfif",
-  "/Img/download (4).jfif",
-  "/Img/download (5).jfif",
-  "/Img/download (5).jpeg",
-  "/Img/download (6).jfif",
-  "/Img/Peace of mind.jpeg"
-];
 
 // --- Translations ---
 const translations: Record<string, any> = {
@@ -253,6 +233,10 @@ const PriorityBadge = ({ priority }: { priority: Priority }) => {
 };
 
 export default function App() {
+  // Dynamic rotating images (changes every 30 minutes)
+  const rotatingImages = useRotatingImages();
+  const [currentRotation, setCurrentRotation] = useState(rotatingImages);
+
   const [user, setUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -313,6 +297,17 @@ export default function App() {
     priority: 'medium',
     customDays: 30
   });
+
+  // --- Image Rotation (every 30 minutes) ---
+  useEffect(() => {
+    const updateRotation = () => {
+      setCurrentRotation(useRotatingImages());
+    };
+    
+    // Update every 30 minutes
+    const interval = setInterval(updateRotation, 30 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // --- Auth & Data ---
   useEffect(() => {
@@ -650,28 +645,28 @@ export default function App() {
       </header>
 
       <main className="relative z-10 flex-1 overflow-y-auto pb-24 sm:pb-24 md:pb-28 lg:pb-32 px-4 pt-6 scrollbar-hide">
-        {/* Full Page Background Images - Colorful */}
+        {/* Full Page Background Images - Colorful & Rotating */}
         {activeTab === 'dashboard' && (
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={mangaArt.eye_briefing} alt="" className="w-full h-full object-cover opacity-20" />
+            <img src={currentRotation.dashboard} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
             <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
           </div>
         )}
         {activeTab === 'tasks' && (
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={mangaArt.slash_task} alt="" className="w-full h-full object-cover opacity-20" />
+            <img src={currentRotation.tasks} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
             <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
           </div>
         )}
         {activeTab === 'calendar' && (
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={mangaArt.samurai_calendar} alt="" className="w-full h-full object-cover opacity-20" />
+            <img src={currentRotation.calendar} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
             <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
           </div>
         )}
         {activeTab === 'subs' && (
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={mangaArt.city_subs} alt="" className="w-full h-full object-cover opacity-20" />
+            <img src={currentRotation.subscriptions} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
             <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
           </div>
         )}
@@ -769,7 +764,7 @@ export default function App() {
                   const dateStr = date.toISOString().split('T')[0];
                   const dayTasks = tasks.filter(t => t.dueDate === dateStr);
                   const isToday = new Date().toDateString() === date.toDateString();
-                  const bgImage = calendarImages[date.getDate() % calendarImages.length];
+                  const bgImage = calendarDateImages[date.getDate() % calendarDateImages.length];
                   return (
                     <button key={idx} onClick={() => { setSelectedDate(dateStr); setIsDateDetailOpen(true); }}
                       className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'bg-black text-white' : 'text-black'}`}
