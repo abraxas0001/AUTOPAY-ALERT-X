@@ -30,52 +30,52 @@ export const getCurrentImage = (images: string[]): string => {
 
 // Dashboard background images
 export const dashboardImages = [
-  '/Img/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
-  '/Img/wallpaperflare.com_wallpaper (4).jpg',
-  '/Img/wallpaperflare.com_wallpaper (5).jpg',
-  '/Img/896302.jpg',
-  '/Img/887559.jpg',
-  '/Img/unnamed7.jpg',
+  '/Img/dashboard/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
+  '/Img/dashboard/wallpaperflare.com_wallpaper (4).jpg',
+  '/Img/dashboard/wallpaperflare.com_wallpaper (5).jpg',
+  '/Img/dashboard/896302.jpg',
+  '/Img/dashboard/887559.jpg',
+  '/Img/dashboard/unnamed7.jpg',
 ];
 
 // Tasks background images
 export const tasksImages = [
-  '/Img/unnamed (3).jpg',
-  '/Img/543497.jpg',
-  '/Img/543509.jpg',
-  '/Img/wallpaperflare.com_wallpaper (6).jpg',
-  '/Img/468739.jpg',
-  '/Img/967545.jpg',
+  '/Img/tasks/unnamed (3).jpg',
+  '/Img/tasks/543497.jpg',
+  '/Img/tasks/543509.jpg',
+  '/Img/tasks/wallpaperflare.com_wallpaper (6).jpg',
+  '/Img/tasks/468739.jpg',
+  '/Img/tasks/967545.jpg',
 ];
 
 // Calendar background images
 export const calendarImages = [
-  '/Img/unnamed (1).jpg',
-  '/Img/pexels-felix-mittermeier-2832071.jpg',
-  '/Img/pexels-pixabay-221189.jpg',
-  '/Img/pexels-pixabay-236950.jpg',
-  '/Img/alone-tree-sunset-qe.jpg',
-  '/Img/WallpaperDog-20487402.jpg',
+  '/Img/calendar/unnamed (1).jpg',
+  '/Img/calendar/pexels-felix-mittermeier-2832071.jpg',
+  '/Img/calendar/pexels-pixabay-221189.jpg',
+  '/Img/calendar/pexels-pixabay-236950.jpg',
+  '/Img/calendar/alone-tree-sunset-qe.jpg',
+  '/Img/calendar/WallpaperDog-20487402.jpg',
 ];
 
 // Subscriptions background images
 export const subscriptionsImages = [
-  '/Img/unnamed (2).jpg',
-  '/Img/wallpaperflare.com_wallpaper (8).jpg',
-  '/Img/1017220.jpg',
-  '/Img/43927.jpg',
-  '/Img/527483.jpg',
-  '/Img/641988.png',
+  '/Img/subscriptions/unnamed (2).jpg',
+  '/Img/subscriptions/wallpaperflare.com_wallpaper (8).jpg',
+  '/Img/subscriptions/1017220.jpg',
+  '/Img/subscriptions/43927.jpg',
+  '/Img/subscriptions/527483.jpg',
+  '/Img/subscriptions/641988.png',
 ];
 
 // Avatar options
 export const avatarImages = [
-  '/Img/Peace of mind.jpeg',
-  '/Img/unnamed (4).jfif',
-  '/Img/120600.png',
-  '/Img/652753.png',
-  '/Img/792977.png',
-  '/Img/900722.png',
+  '/Img/avatars/Peace of mind.jpeg',
+  '/Img/avatars/unnamed (4).jfif',
+  '/Img/avatars/120600.png',
+  '/Img/avatars/652753.png',
+  '/Img/avatars/792977.png',
+  '/Img/avatars/900722.png',
 ];
 
 // Calendar date tile images (cycle through all)

@@ -625,11 +625,37 @@ export default function App() {
         </div>
       )}
 
+      {/* Full Page Background Images - Colorful & Rotating */}
+      {activeTab === 'dashboard' && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <img src={currentRotation.dashboard} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+        </div>
+      )}
+      {activeTab === 'tasks' && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <img src={currentRotation.tasks} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+        </div>
+      )}
+      {activeTab === 'calendar' && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <img src={currentRotation.calendar} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+        </div>
+      )}
+      {activeTab === 'subs' && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <img src={currentRotation.subscriptions} alt="" className="w-full h-full object-cover opacity-15 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/70 via-neutral-100/85 to-neutral-100/95"></div>
+        </div>
+      )}
+
       {/* Global Texture */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-multiply"></div>
+      <div className="absolute inset-0 z-[1] pointer-events-none opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-multiply"></div>
 
       {/* Top Bar */}
-      <header className="relative z-10 bg-white border-b-4 border-black px-6 py-5 flex justify-between items-center shadow-[0_4px_0px_0px_rgba(0,0,0,1)]">
+      <header className="relative z-20 bg-white border-b-4 border-black px-6 py-5 flex justify-between items-center shadow-[0_4px_0px_0px_rgba(0,0,0,1)]">
         <div className="flex flex-col">
           <h1 className="text-3xl font-black italic tracking-tighter uppercase leading-none transform -skew-x-6 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
             {activeTab === 'dashboard' && t.home}
@@ -644,35 +670,9 @@ export default function App() {
         </button>
       </header>
 
-      <main className="relative z-10 flex-1 overflow-y-auto pb-24 sm:pb-24 md:pb-28 lg:pb-32 px-4 pt-6 scrollbar-hide">
-        {/* Full Page Background Images - Colorful & Rotating */}
+      <main className="relative z-20 flex-1 overflow-y-auto pb-24 sm:pb-24 md:pb-28 lg:pb-32 px-4 pt-6 scrollbar-hide">
         {activeTab === 'dashboard' && (
-          <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={currentRotation.dashboard} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
-          </div>
-        )}
-        {activeTab === 'tasks' && (
-          <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={currentRotation.tasks} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
-          </div>
-        )}
-        {activeTab === 'calendar' && (
-          <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={currentRotation.calendar} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
-          </div>
-        )}
-        {activeTab === 'subs' && (
-          <div className="fixed inset-0 z-0 pointer-events-none">
-            <img src={currentRotation.subscriptions} alt="" className="w-full h-full object-cover opacity-20 transition-opacity duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/80 via-neutral-100/90 to-neutral-100"></div>
-          </div>
-        )}
-
-        {activeTab === 'dashboard' && (
-          <div className="space-y-8 relative z-10">
+          <div className="space-y-8">
             {/* Briefing */}
             <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)] relative overflow-hidden group min-h-[200px] flex flex-col justify-between">
                <div className="absolute inset-0 z-0 opacity-40 mix-blend-screen group-hover:opacity-50 transition-opacity duration-500"><img src={mangaArt.eye_briefing} alt="Insight" className="w-full h-full object-cover grayscale contrast-125" /></div>
@@ -703,7 +703,7 @@ export default function App() {
 
         {/* Tasks */}
         {activeTab === 'tasks' && (
-          <div className="space-y-8 relative z-10">
+          <div className="space-y-8">
             {groupedTasks.general.length > 0 && (
               <div className="space-y-4">
                 <div className="flex items-center gap-2 border-b-4 border-black pb-2"><List className="w-5 h-5" /><h2 className="text-xl font-black uppercase italic">GENERAL ORDERS</h2></div>
@@ -749,7 +749,7 @@ export default function App() {
 
         {/* Calendar */}
         {activeTab === 'calendar' && (
-          <div className="space-y-6 relative z-10">
+          <div className="space-y-6">
             <div className="bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden min-h-[450px]">
               <div className="absolute inset-0 z-0"><img src={mangaArt.samurai_calendar} alt="Character" className="w-full h-full object-cover object-top opacity-30 grayscale contrast-150" /><div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div>
               <div className="relative z-10 flex items-center justify-between mb-6 bg-black text-white p-3 shadow-lg transform -skew-x-2">
@@ -782,7 +782,7 @@ export default function App() {
 
         {/* Subs */}
         {activeTab === 'subs' && (
-          <div className="space-y-6 relative z-10">
+          <div className="space-y-6">
             <div className="bg-black text-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
                <div className="absolute inset-0 opacity-30 grayscale"><img src={mangaArt.city_subs} alt="Background" className="w-full h-full object-cover" /></div>
                <div className="absolute inset-0 bg-black/50"></div>
