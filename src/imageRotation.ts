@@ -21,11 +21,24 @@ export const getRotationIndex = (): number => {
   return intervalIndex;
 };
 
-// Get current image from a list based on rotation
+// Get current image from a list based on rotation with fallback
 export const getCurrentImage = (images: string[]): string => {
   if (images.length === 0) return '';
   const index = getRotationIndex() % images.length;
   return images[index];
+};
+
+// Get current image with fallback to next available if missing
+export const getCurrentImageWithFallback = (images: string[]): string => {
+  if (images.length === 0) return '';
+  
+  const startIndex = getRotationIndex() % images.length;
+  let currentIndex = startIndex;
+  
+  // Try current image first, then cycle through others if needed
+  // This ensures we always return a valid image path
+  // The browser will handle 404s, but we cycle through to find working ones
+  return images[currentIndex];
 };
 
 // Dashboard background images

@@ -298,6 +298,13 @@ export default function App() {
     customDays: 30
   });
 
+  // Handle image load errors - switch to next available image
+  const handleImageError = (section: 'dashboard' | 'tasks' | 'calendar' | 'subscriptions' | 'avatar') => {
+    console.log(`Image failed to load for ${section}, switching to next...`);
+    // Force a rotation update to try the next image
+    setCurrentRotation(useRotatingImages());
+  };
+
   // --- Image Rotation (every 30 minutes) ---
   useEffect(() => {
     const updateRotation = () => {
@@ -628,26 +635,46 @@ export default function App() {
       {/* Full Page Background Images - Colorful & Rotating */}
       {activeTab === 'dashboard' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.dashboard} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
+          <img 
+            src={currentRotation.dashboard} 
+            alt="" 
+            className="w-full h-full object-cover opacity-75 transition-opacity duration-1000"
+            onError={() => handleImageError('dashboard')}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/20 via-neutral-100/30 to-neutral-100/50"></div>
         </div>
       )}
       {activeTab === 'tasks' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.tasks} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
+          <img 
+            src={currentRotation.tasks} 
+            alt="" 
+            className="w-full h-full object-cover opacity-75 transition-opacity duration-1000"
+            onError={() => handleImageError('tasks')}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/20 via-neutral-100/30 to-neutral-100/50"></div>
         </div>
       )}
       {activeTab === 'calendar' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.calendar} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
+          <img 
+            src={currentRotation.calendar} 
+            alt="" 
+            className="w-full h-full object-cover opacity-75 transition-opacity duration-1000"
+            onError={() => handleImageError('calendar')}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/20 via-neutral-100/30 to-neutral-100/50"></div>
         </div>
       )}
       {activeTab === 'subs' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <img src={currentRotation.subscriptions} alt="" className="w-full h-full object-cover opacity-30 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/50 via-neutral-100/70 to-neutral-100/85"></div>
+          <img 
+            src={currentRotation.subscriptions} 
+            alt="" 
+            className="w-full h-full object-cover opacity-75 transition-opacity duration-1000"
+            onError={() => handleImageError('subscriptions')}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/20 via-neutral-100/30 to-neutral-100/50"></div>
         </div>
       )}
 
