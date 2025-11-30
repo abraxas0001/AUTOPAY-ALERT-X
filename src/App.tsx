@@ -20,7 +20,7 @@ import { useRotatingImages, calendarDateImages } from './imageRotation';
 // --- CONFIGURATION ---
 
 // 1. GEMINI API KEY (PASTED HERE)
-const apiKey = "AIzaSyDek7KnZqs0ZzKRPC41Z2p48wJ7vjDut8Q"; 
+const apiKey = "AIzaSyC-_6aJux4CjOEnFJGNbojRtxwvHnAX0O0"; 
 
 // 2. FIREBASE CONFIGURATION (PASTED HERE)
 const firebaseConfig = {
