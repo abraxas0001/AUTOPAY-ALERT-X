@@ -35,6 +35,7 @@ export async function streamGeminiAPI(options: StreamOptions): Promise<void> {
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
+    let buffer = '';
 
     while (true) {
       const { done, value } = await reader.read();
@@ -44,24 +45,45 @@ export async function streamGeminiAPI(options: StreamOptions): Promise<void> {
         break;
       }
 
-      // Decode the chunk
-      const chunk = decoder.decode(value, { stream: true });
+      // Decode the chunk and add to buffer
+      buffer += decoder.decode(value, { stream: true });
       
-      // Parse newline-delimited JSON responses
-      const lines = chunk.split('\n').filter(line => line.trim());
+      // Split by newlines and process complete lines
+      const lines = buffer.split('\n');
       
+      // Keep the last incomplete line in the buffer
+      buffer = lines.pop() || '';
+      
+      // Process complete lines
       for (const line of lines) {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) continue;
+        
         try {
-          const data = JSON.parse(line);
+          const data = JSON.parse(trimmedLine);
           const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
           
           if (text) {
             onChunk(text);
           }
         } catch (parseError) {
-          // Skip lines that aren't valid JSON
-          console.warn('Failed to parse chunk:', parseError);
+          // Skip lines that aren't valid JSON - this is normal for incomplete chunks
+          console.debug('Skipping incomplete chunk');
         }
+      }
+    }
+    
+    // Process any remaining data in buffer
+    if (buffer.trim()) {
+      try {
+        const data = JSON.parse(buffer);
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          onChunk(text);
+        }
+      } catch (parseError) {
+        // Ignore final incomplete chunk
+        console.debug('Skipping final incomplete chunk');
       }
     }
   } catch (error) {
