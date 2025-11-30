@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
-  Plus, Calendar as CalendarIcon, CheckCircle2, Circle, AlertTriangle, CreditCard, 
-  Briefcase, LayoutDashboard, Trash2, X, ChevronRight, ChevronLeft, Bell, Sparkles, 
-  Loader2, BrainCircuit, Clock, Zap, Pencil, ChevronDown, ChevronUp, Target, Sword, 
-  Coins, Map, FileText, User, Globe, Save, Upload, Image as ImageIcon, List, 
-  CalendarDays, Check, Siren, History, Tv, ShoppingCart, Music, AlertOctagon, 
+  Plus, Calendar as CalendarIcon, CheckCircle2, CreditCard, 
+  LayoutDashboard, Trash2, X, ChevronRight, ChevronLeft, Sparkles, 
+  Loader2, BrainCircuit, ChevronDown, ChevronUp, Sword, 
+  Coins, Globe, Save, Upload, List, 
+  CalendarDays, Check, Siren, History, AlertOctagon, 
   Volume2, Play
 } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { 
-  getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken 
+  getAuth, signInAnonymously, onAuthStateChanged
 } from 'firebase/auth';
 import { 
   getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, 
-  query, orderBy, serverTimestamp, setDoc, getDoc, where 
+  query, orderBy, serverTimestamp, setDoc, getDoc
 } from 'firebase/firestore';
 
 // --- CONFIGURATION ---
