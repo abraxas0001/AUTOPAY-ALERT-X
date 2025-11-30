@@ -727,7 +727,7 @@ export default function App() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="/Img/top-bar/964122.png" 
+            src="/Img/patterns/964122.png" 
             alt="" 
             className="w-full h-full object-cover opacity-90"
           />
@@ -752,7 +752,7 @@ export default function App() {
           <div className="space-y-8">
             {/* Briefing */}
             <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)] relative overflow-hidden group min-h-[200px] flex flex-col justify-between">
-               <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-1000"><img src={currentRotation.dashboardBanner} alt="Insight" className="w-full h-full object-cover grayscale" /></div>
+               <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-1000"><img src="/Img/dashboard/banners/294071.jpg" alt="Insight" className="w-full h-full object-cover grayscale" onError={() => handleImageError('dashboardBanner')} /></div>
                <div className="relative z-10 p-5 flex justify-between items-start">
                  <div className="flex items-center gap-2 text-white"><BrainCircuit className="w-6 h-6" /><h3 className="font-black uppercase tracking-[0.2em] text-lg">{t.brief}</h3></div>
                  {dailyBriefing && <button onClick={() => setDailyBriefing(null)}><X className="w-5 h-5"/></button>}
@@ -1009,11 +1009,11 @@ export default function App() {
       }} className="fixed z-[90] w-16 h-16 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 bottom-28 sm:bottom-28 md:bottom-32 lg:bottom-36 right-6 sm:right-6 md:right-8 lg:right-12 xl:right-[calc(50vw-32rem)] bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t-4 border-black p-2 pb-4 sm:p-2 sm:pb-4 md:p-3 md:pb-5 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 relative overflow-hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t-4 border-black p-3 pb-6 sm:p-3 sm:pb-6 md:p-4 md:pb-6 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 min-h-[70px] relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="/Img/patterns/964122.png" 
+            src="/Img/download (16).jfif" 
             alt="" 
             className="w-full h-full object-cover opacity-65"
           />
