@@ -800,7 +800,7 @@ export default function App() {
         {activeTab === 'calendar' && (
           <div className="space-y-6">
             <div className="bg-white texture-pattern-subtle-lines border-4 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden min-h-[450px]">
-              <div className="absolute inset-0 z-0"><img src={currentRotation.calendarSubBackground} alt="Background" className="w-full h-full object-cover object-top opacity-[0.98] grayscale contrast-150" onError={() => handleImageError('calendarSubBackground')} /><div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div>
+              <div className="absolute inset-0 z-0"><img src={currentRotation.calendarSubBackground} alt="Background" className="w-full h-full object-cover object-top opacity-[0.98]" onError={() => handleImageError('calendarSubBackground')} /><div className="absolute inset-0 bg-gradient-to-t from-white/80 via-white/40 to-transparent"></div></div>
               <div className="relative z-10 flex items-center justify-between mb-6 bg-black text-white p-3 shadow-lg transform -skew-x-2">
                 <button onClick={() => { const d = new Date(currentMonth); d.setMonth(d.getMonth()-1); setCurrentMonth(d); }}><ChevronLeft className="w-6 h-6" /></button>
                 <h2 className="text-2xl font-black uppercase tracking-[0.2em]">{currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h2>

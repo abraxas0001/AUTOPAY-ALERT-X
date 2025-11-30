@@ -84,13 +84,15 @@ Your images are now organized into specific folders. Simply drop images into the
 
 ## 🎨 Texture Patterns:
 
-The app now includes subtle texture patterns on white backgrounds to maintain visual interest:
+The app now includes visible texture patterns on white backgrounds at 50% opacity:
 
-- **Paper Pattern** - Used on modals, stats cards, and date detail windows
-- **Grid Pattern** - Applied to navigation bar
-- **Dots Pattern** - Used on calendar day headers and subscription details
-- **Subtle Lines** - Applied to calendar grid background
+- **Paper Pattern** - Dots and lines texture on modals, stats cards, and date detail windows
+- **Grid Pattern** - Grid lines on navigation bar
+- **Dots Pattern** - Dot matrix on calendar day headers and subscription details
+- **Subtle Lines** - Horizontal lines on calendar grid background
 
-All patterns are CSS-based (no image files needed) and display at very low opacity to maintain the clean aesthetic while adding depth.
+All patterns are CSS-based SVG overlays at 50% opacity, providing clear visual texture while maintaining readability.
+
+**Calendar Sub-Background:** Now displays in full color at 98% opacity (grayscale removed) for vibrant visual appeal.
 
 Enjoy your dynamic, ever-changing UI! 🎨✨
