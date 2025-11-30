@@ -164,8 +164,6 @@ export const todayImages = [
 // Banner images for dark sections (Daily Briefing, Stats, etc.)
 export const dashboardBannerImages = [
   '/Img/dashboard/banners/294071.jpg',
-  '/Img/dashboard/banners/522965.jpg',
-  '/Img/dashboard/banners/786077.png',
   '/Img/dashboard/banners/950280.png',
   '/Img/dashboard/banners/download (17).jfif',
 ];
@@ -186,11 +184,8 @@ export const calendarBannerImages = [
 
 export const subscriptionsBannerImages = [
   '/Img/subscriptions/banners/1017220.jpg',
-  '/Img/subscriptions/banners/43927.jpg',
-  '/Img/subscriptions/banners/527483.jpg',
   '/Img/subscriptions/banners/download (10).jfif',
   '/Img/subscriptions/banners/download (12).jfif',
-  '/Img/subscriptions/banners/Peace of mind.jpeg',
 ];
 
 // Modal background images
