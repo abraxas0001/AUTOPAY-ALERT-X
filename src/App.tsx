@@ -22,6 +22,7 @@ import { AIStreamingDisplay } from './components/AIStreamingDisplay';
 // --- CONFIGURATION ---
 
 // FIREBASE CONFIGURATION (FROM ENVIRONMENT)
+// Updated: AI Streaming features enabled
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
