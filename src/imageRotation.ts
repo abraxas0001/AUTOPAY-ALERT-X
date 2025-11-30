@@ -60,11 +60,10 @@ export const getCurrentImageWithFallback = (images: string[]): string => {
 
 // Dashboard background images - Landscape (for PC/Laptop)
 export const dashboardLandscapeImages = [
-  '/Img/dashboard/landscape/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
   '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (4).jpg',
-  '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (5).jpg',
   '/Img/dashboard/landscape/896302.jpg',
   '/Img/dashboard/landscape/887559.jpg',
+  '/Img/dashboard/landscape/900722.png',
 ];
 
 // Dashboard background images - Portrait (for Phone/Tablet)
@@ -76,25 +75,22 @@ export const dashboardPortraitImages = [
 
 // Tasks background images - Landscape (for PC/Laptop)
 export const tasksLandscapeImages = [
-  '/Img/tasks/landscape/unnamed (3).jpg',
   '/Img/tasks/landscape/wallpaperflare.com_wallpaper (6).jpg',
   '/Img/tasks/landscape/468739.jpg',
   '/Img/tasks/landscape/967545.jpg',
+  '/Img/tasks/landscape/652753.png',
 ];
 
 // Tasks background images - Portrait (for Phone/Tablet)
 export const tasksPortraitImages = [
   '/Img/tasks/portrait/652753.png',
-  '/Img/tasks/portrait/Stark man.jfif',
-  '/Img/tasks/portrait/download (14).jfif',
-  '/Img/tasks/portrait/why not you_.jfif',
+  '/Img/tasks/portrait/unnamed (3).jpg',
 ];
 
 // Calendar background images - Landscape (for PC/Laptop)
 export const calendarLandscapeImages = [
   '/Img/calendar/landscape/pexels-felix-mittermeier-2832071.jpg',
   '/Img/calendar/landscape/alone-tree-sunset-qe.jpg',
-  '/Img/calendar/landscape/Misty Mountain Blossoms.jfif',
 ];
 
 // Calendar background images - Portrait (for Phone/Tablet)
@@ -103,13 +99,15 @@ export const calendarPortraitImages = [
   '/Img/calendar/portrait/download (8).jfif',
   '/Img/calendar/portrait/download (9).jfif',
   '/Img/calendar/portrait/download (11).jfif',
+  '/Img/calendar/portrait/download (5).jfif',
+  '/Img/calendar/portrait/download (6).jfif',
+  '/Img/calendar/portrait/download.jpg',
 ];
 
 // Calendar sub-background images (for the character/overlay layer) - Landscape
 export const calendarSubBackgroundLandscapeImages = [
   '/Img/calendar/sub-background/landscape/pexels-felix-mittermeier-2832071.jpg',
   '/Img/calendar/sub-background/landscape/alone-tree-sunset-qe.jpg',
-  '/Img/calendar/sub-background/landscape/Misty Mountain Blossoms.jfif',
 ];
 
 // Calendar sub-background images (for the character/overlay layer) - Portrait
@@ -123,14 +121,13 @@ export const calendarSubBackgroundPortraitImages = [
 export const subscriptionsLandscapeImages = [
   '/Img/subscriptions/landscape/wallpaperflare.com_wallpaper (8).jpg',
   '/Img/subscriptions/landscape/1017220.jpg',
-  '/Img/subscriptions/landscape/43927.jpg',
 ];
 
 // Subscriptions background images - Portrait (for Phone/Tablet)
 export const subscriptionsPortraitImages = [
-  '/Img/subscriptions/portrait/527483.jpg',
   '/Img/subscriptions/portrait/641988.png',
-  '/Img/subscriptions/portrait/43927.jpg',
+  '/Img/subscriptions/portrait/120600.png',
+  '/Img/subscriptions/portrait/unnamed (2).jpg',
 ];
 
 // Avatar options
@@ -143,12 +140,10 @@ export const avatarImages = [
 // Calendar date tile images (cycle through all)
 export const calendarDateImages = [
   '/Img/calendar/download.jpg',
-  '/Img/calendar/downlo.jpeg',
   '/Img/calendar/download (2).jfif',
   '/Img/calendar/download (3).jfif',
   '/Img/calendar/download (4).jfif',
   '/Img/calendar/download (5).jfif',
-  '/Img/calendar/download (5).jpeg',
   '/Img/calendar/download (6).jfif',
   '/Img/calendar/download (7).jfif',
   '/Img/calendar/download (8).jfif',
@@ -163,48 +158,51 @@ export const calendarDateImages = [
 
 // Today's date images (colorful, not grayscale)
 export const todayImages = [
-  '/Img/calendar/today/pexels-felix-mittermeier-2832071.jpg',
-  '/Img/calendar/today/Misty Mountain Blossoms.jfif',
   '/Img/calendar/today/alone-tree-sunset-qe.jpg',
 ];
 
 // Banner images for dark sections (Daily Briefing, Stats, etc.)
 export const dashboardBannerImages = [
-  '/Img/dashboard/banners/Nature Aesthetic.jfif',
-  '/Img/dashboard/banners/download (16).jfif',
+  '/Img/dashboard/banners/294071.jpg',
+  '/Img/dashboard/banners/522965.jpg',
+  '/Img/dashboard/banners/786077.png',
+  '/Img/dashboard/banners/950280.png',
   '/Img/dashboard/banners/download (17).jfif',
 ];
 
 export const tasksBannerImages = [
-  '/Img/tasks/banners/543497.jpg',
-  '/Img/tasks/banners/543509.jpg',
-  '/Img/tasks/banners/468739.jpg',
+  '/Img/tasks/banners/2026102.png',
+  '/Img/tasks/banners/454440-Valorant-Jett-Valorant-phoenix-valorant-Sova-valorant.jpg',
 ];
 
 export const calendarBannerImages = [
-  '/Img/calendar/banners/pexels-felix-mittermeier-2832071.jpg',
   '/Img/calendar/banners/pexels-pixabay-221189.jpg',
   '/Img/calendar/banners/alone-tree-sunset-qe.jpg',
+  '/Img/calendar/banners/downlo.jpeg',
+  '/Img/calendar/banners/download (5).jpeg',
+  '/Img/calendar/banners/WALL_2022-06-28_05.02.18.png',
+  '/Img/calendar/banners/WallpaperDog-20487402.jpg',
 ];
 
 export const subscriptionsBannerImages = [
   '/Img/subscriptions/banners/1017220.jpg',
   '/Img/subscriptions/banners/43927.jpg',
   '/Img/subscriptions/banners/527483.jpg',
+  '/Img/subscriptions/banners/download (10).jfif',
+  '/Img/subscriptions/banners/download (12).jfif',
+  '/Img/subscriptions/banners/Peace of mind.jpeg',
 ];
 
 // Modal background images
 export const modalImages = [
-  '/Img/dashboard/landscape/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
-  '/Img/dashboard/landscape/896302.jpg',
-  '/Img/dashboard/landscape/887559.jpg',
+  '/Img/modals/Misty Mountain Blossoms.jfif',
+  '/Img/modals/unnamed (2).jpg',
+  '/Img/modals/Vagabond - Musashi Miyamoto wallpaper 1920x1080.jfif',
 ];
 
 // Loading screen images
 export const loadingImages = [
-  '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (4).jpg',
-  '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (5).jpg',
-  '/Img/dashboard/landscape/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
+  '/Img/loading/2026102.png',
 ];
 
 // Hook to get current images with auto-refresh every 30 minutes

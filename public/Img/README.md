@@ -14,8 +14,14 @@ Your images are now organized into specific folders. Simply drop images into the
 6. **`modals/`** - Background images for modals (task creation, date details)
 7. **`loading/`** - Loading screen background images
 8. **`top-bar/`** - Unified header background (single image for all sections at 90% opacity)
-9. **`calendar/sub-background/`** - Secondary layer for calendar grid (landscape/portrait folders, 98% opacity)
-10. **`patterns/`** - Minimal texture patterns for white backgrounds (CSS-based, no images needed)
+9. **`calendar/sub-background/`** - Secondary layer for calendar grid (landscape/portrait folders, 98% opacity, colorful)
+10. **`patterns/`** - Minimal texture patterns for white backgrounds
+11. **`modals/`** - Background images for modal dialogs (task creation, profile, etc.)
+12. **`loading/`** - Loading screen background images
+
+## 🎵 Music Folder
+
+Located at `/public/music/` - Add MP3, WAV, or OGG files here for alarm/notification sounds.
 
 ## 🔄 How It Works
 
@@ -26,48 +32,40 @@ Your images are now organized into specific folders. Simply drop images into the
 
 ## 📝 Current Image Assignments
 
-### Dashboard Backgrounds (6 images)
-- 391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg
-- wallpaperflare.com_wallpaper (4).jpg
-- wallpaperflare.com_wallpaper (5).jpg
-- 896302.jpg
-- 887559.jpg
-- unnamed7.jpg
+### Dashboard Backgrounds
+- **Landscape (4):** wallpaperflare.com_wallpaper (4).jpg, 896302.jpg, 887559.jpg, 900722.png
+- **Portrait (3):** 900722.png, 887559.jpg, 896302.jpg
+- **Banners (5):** 294071.jpg, 522965.jpg, 786077.png, 950280.png, download (17).jfif
 
-### Tasks Backgrounds (6 images)
-- unnamed (3).jpg
-- 543497.jpg
-- 543509.jpg
-- wallpaperflare.com_wallpaper (6).jpg
-- 468739.jpg
-- 967545.jpg
+### Tasks Backgrounds
+- **Landscape (4):** wallpaperflare.com_wallpaper (6).jpg, 468739.jpg, 967545.jpg, 652753.png
+- **Portrait (2):** 652753.png, unnamed (3).jpg
+- **Banners (2):** 2026102.png, 454440-Valorant-Jett-Valorant-phoenix-valorant-Sova-valorant.jpg
 
-### Calendar Backgrounds (6 images)
-- unnamed (1).jpg
-- pexels-felix-mittermeier-2832071.jpg
-- pexels-pixabay-221189.jpg
-- pexels-pixabay-236950.jpg
-- alone-tree-sunset-qe.jpg
-- WallpaperDog-20487402.jpg
+### Calendar Backgrounds
+- **Landscape (2):** pexels-felix-mittermeier-2832071.jpg, alone-tree-sunset-qe.jpg
+- **Portrait (7):** download (7-9, 11, 5-6).jfif, download.jpg
+- **Sub-background Landscape (2):** pexels-felix-mittermeier-2832071.jpg, alone-tree-sunset-qe.jpg
+- **Sub-background Portrait (3):** download (7-9).jfif
+- **Banners (6):** pexels-pixabay-221189.jpg, alone-tree-sunset-qe.jpg, downlo.jpeg, download (5).jpeg, WALL_2022-06-28_05.02.18.png, WallpaperDog-20487402.jpg
+- **Today (1):** alone-tree-sunset-qe.jpg
 
-### Subscriptions Backgrounds (6 images)
-- unnamed (2).jpg
-- wallpaperflare.com_wallpaper (8).jpg
-- 1017220.jpg
-- 43927.jpg
-- 527483.jpg
-- 641988.png
+### Subscriptions Backgrounds
+- **Landscape (2):** wallpaperflare.com_wallpaper (8).jpg, 1017220.jpg
+- **Portrait (3):** 641988.png, 120600.png, unnamed (2).jpg
+- **Banners (6):** 1017220.jpg, 43927.jpg, 527483.jpg, download (10, 12).jfif, Peace of mind.jpeg
 
-### Avatar Options (6 images)
-- Peace of mind.jpeg
-- unnamed (4).jfif
-- 120600.png
-- 652753.png
-- 792977.png
-- 900722.png
+### Avatar Options (3)
+- 543497.jpg, 543509.jpg, unnamed (4).jfif
 
-### Calendar Date Tiles (17 images)
-- All unnamed.jpg, download.jpg, etc. files
+### Modal Backgrounds (3)
+- Misty Mountain Blossoms.jfif, unnamed (2).jpg, Vagabond - Musashi Miyamoto wallpaper 1920x1080.jfif
+
+### Loading Screen (1)
+- 2026102.png
+
+### Calendar Date Tiles (15)
+- download.jpg, download (2-9, 11).jfif, pexels-felix-mittermeier-2832071.jpg, Misty Mountain Blossoms.jfif, alone-tree-sunset-qe.jpg, unnamed (8).jpg, unnamed7.jpg
 
 ## 🚀 To Add More Images:
 
