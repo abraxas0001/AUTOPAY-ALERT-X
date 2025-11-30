@@ -5,7 +5,7 @@ import {
   Loader2, BrainCircuit, ChevronDown, ChevronUp, Sword, 
   Coins, Globe, Save, Upload, List, 
   CalendarDays, Check, Siren, History, AlertOctagon, 
-  Volume2, Play, Edit
+  Volume2, Play, Edit, Pause
 } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { 
@@ -281,6 +281,8 @@ export default function App() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
+  const previewAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
 
   // UI State
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -541,10 +543,31 @@ export default function App() {
   };
 
   const playPreviewSound = () => {
+      // If already playing, stop it
+      if (isPreviewPlaying && previewAudioRef.current) {
+          previewAudioRef.current.pause();
+          previewAudioRef.current = null;
+          setIsPreviewPlaying(false);
+          return;
+      }
+
+      // Play new sound
       if (profile.alarmSound && profile.alarmSound !== 'custom') {
-          const audio = new Audio(profile.alarmSound);
-          audio.volume = 0.5; // Set volume to 50%
-          audio.play().catch(e => console.log("Audio play error", e));
+          // Stop any existing audio
+          if (previewAudioRef.current) {
+              previewAudioRef.current.pause();
+              previewAudioRef.current = null;
+          }
+
+          previewAudioRef.current = new Audio(profile.alarmSound);
+          previewAudioRef.current.volume = 0.5;
+          previewAudioRef.current.onended = () => setIsPreviewPlaying(false);
+          previewAudioRef.current.play()
+              .then(() => setIsPreviewPlaying(true))
+              .catch(e => {
+                  console.log("Audio play error", e);
+                  setIsPreviewPlaying(false);
+              });
       } else {
           alert(`Please select an alarm sound first`);
       }
@@ -961,8 +984,10 @@ export default function App() {
                         {profile.alarmSound === 'custom' && (
                             <button onClick={() => audioInputRef.current?.click()} className="bg-black text-white px-3 border-2 border-black"><Upload className="w-4 h-4"/></button>
                         )}
-                        <button onClick={playPreviewSound} className="bg-green-500 text-white px-3 border-2 border-black"><Play className="w-4 h-4"/></button>
-                        <input type="file" ref={audioInputRef} className="hidden" accept="audio/*" onChange={handleAudioSelect} />
+                        <button onClick={playPreviewSound} className={`${isPreviewPlaying ? 'bg-red-500' : 'bg-green-500'} text-white px-3 border-2 border-black transition-colors`}>
+                            {isPreviewPlaying ? <Pause className="w-4 h-4"/> : <Play className="w-4 h-4"/>}
+                        </button>
+                        <input type="file" ref={audioInputRef} className="hidden" accept="audio/mp3,audio/wav,audio/ogg,audio/mpeg,audio/aac,audio/flac,audio/m4a,audio/*" onChange={handleAudioSelect} />
                     </div>
                 </div>
 
