@@ -13,6 +13,9 @@ export default {
       animation: {
         'spin-slow': 'spin 12s linear infinite',
       },
+      spacing: {
+        'safe': 'env(safe-area-inset-bottom, 0px)',
+      },
     },
   },
   plugins: [],

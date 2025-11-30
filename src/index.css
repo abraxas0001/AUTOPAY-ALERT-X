@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Custom Properties for Responsive Design */
+:root {
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --nav-height-mobile: 4rem;
+  --nav-height-tablet: 4.5rem;
+  --nav-height-laptop: 5.5rem;
+  --nav-height-desktop: 6rem;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -22,6 +31,34 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+
+/* Accessibility: Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Landscape Orientation Optimizations for Mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  :root {
+    --nav-height-mobile: 3.5rem;
+  }
+  
+  nav {
+    padding-top: 0.375rem !important;
+    padding-bottom: calc(0.375rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  
+  main {
+    padding-top: 1rem !important;
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
