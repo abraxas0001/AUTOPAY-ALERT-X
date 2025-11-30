@@ -276,8 +276,6 @@ export default function App() {
 
   // AI State
   const [isAiGenerating, setIsAiGenerating] = useState(false);
-  const [subAnalysis, setSubAnalysis] = useState<string | null>(null);
-  const [isAnalyzingSubs, setIsAnalyzingSubs] = useState(false);
   const [dailyBriefing, setDailyBriefing] = useState<string | null>(null);
   const [isGeneratingBriefing, setIsGeneratingBriefing] = useState(false);
 
@@ -415,17 +413,6 @@ export default function App() {
 
 
   // --- Logic ---
-  const upcomingRenewals = useMemo(() => {
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const nextWeek = new Date(today);
-    nextWeek.setDate(today.getDate() + 7);
-    return subscriptions.filter(s => {
-      const d = new Date(s.nextBillingDate);
-      return d >= today && d <= nextWeek;
-    }).sort((a,b) => new Date(a.nextBillingDate).getTime() - new Date(b.nextBillingDate).getTime());
-  }, [subscriptions]);
-
   const totalMonthlyCost = useMemo(() => subscriptions.reduce((acc, s) => {
     let factor = 1;
     if(s.cycle === 'yearly') factor = 1/12;
@@ -522,15 +509,6 @@ export default function App() {
     setIsAiGenerating(false);
   };
 
-  const handleAnalyzeSubs = async () => {
-    if(subscriptions.length === 0) return;
-    setIsAnalyzingSubs(true);
-    const subList = subscriptions.map(s => `${s.name} (${s.cost})`).join(', ');
-    const text = await callGeminiAPI(`Review subs: ${subList}. Save money tips. Language: ${profile.language}`);
-    setSubAnalysis(text);
-    setIsAnalyzingSubs(false);
-  };
-
   const handleDailyBriefing = async () => {
     setIsGeneratingBriefing(true);
     const pendingCount = tasks.filter(t => t.status !== 'done').length;
@@ -557,17 +535,6 @@ export default function App() {
     playPreviewSound();
   };
 
-  const openTaskModal = (task?: Task) => {
-    if (task) {
-      setEditingTask(task);
-      setTaskForm({ title: task.title, description: task.description, priority: task.priority, dueDate: task.dueDate || '' });
-    } else {
-      setEditingTask(null);
-      setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] });
-    }
-    setIsTaskModalOpen(true);
-  };
-
   const saveTask = async (keepOpen = false) => {
     if (!taskForm.title.trim() || !user) return;
     const taskData = { ...taskForm, dueDate: taskForm.dueDate || "" };
@@ -592,7 +559,6 @@ export default function App() {
   };
 
   const toggleStatus = async (t: Task) => { await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'tasks', t.id), { status: t.status === 'done' ? 'todo' : 'done' }); };
-  const deleteTask = async (id: string) => { await deleteDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'tasks', id)); };
   const deleteSub = async (id: string) => deleteDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'subscriptions', id));
   
   const deleteHistoryItem = async (subId: string, historyId: string) => {
@@ -760,7 +726,7 @@ export default function App() {
                       className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'bg-black text-white' : 'text-black ' + getMangaPattern(idx)}`}
                     >
                       <span className="absolute top-1 left-1.5 text-xs font-black z-10">{date.getDate()}</span>
-                      {dayTasks.length > 0 && (<div className="absolute bottom-1 right-1 flex flex-col items-end gap-0.5 z-10">{dayTasks.slice(0, 3).map((t, i) => (<div key={t.id} className={`w-1.5 h-1.5 border border-black ${t.status === 'done' ? 'bg-neutral-600' : 'bg-white'}`}></div>))}</div>)}
+                      {dayTasks.length > 0 && (<div className="absolute bottom-1 right-1 flex flex-col items-end gap-0.5 z-10">{dayTasks.slice(0, 3).map((t) => (<div key={t.id} className={`w-1.5 h-1.5 border border-black ${t.status === 'done' ? 'bg-neutral-600' : 'bg-white'}`}></div>))}</div>)}
                     </button>
                   );
                 })}
