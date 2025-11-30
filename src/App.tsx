@@ -278,6 +278,8 @@ export default function App() {
   const [isSubModalOpen, setIsSubModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [isDateDetailOpen, setIsDateDetailOpen] = useState(false);
 
   // AI State
   const [isAiGenerating, setIsAiGenerating] = useState(false);
@@ -728,7 +730,7 @@ export default function App() {
                   const isToday = new Date().toDateString() === date.toDateString();
                   const bgImage = calendarImages[date.getDate() % calendarImages.length];
                   return (
-                    <button key={idx} onClick={() => { setTaskForm(p => ({ ...p, dueDate: dateStr })); setEditingTask(null); setIsTaskModalOpen(true); }}
+                    <button key={idx} onClick={() => { setSelectedDate(dateStr); setIsDateDetailOpen(true); }}
                       className={`aspect-[4/5] relative border-2 border-black transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group overflow-hidden ${isToday ? 'bg-black text-white' : 'text-black'}`}
                     >
                       {!isToday && <img src={bgImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 grayscale group-hover:opacity-60 group-hover:grayscale-0 transition-all" />}
@@ -879,7 +881,18 @@ export default function App() {
       )}
 
       {/* Task Creator FAB */}
-      <button onClick={() => { setEditingTask(null); setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] }); if (activeTab === 'subs') setIsSubModalOpen(true); else setIsTaskModalOpen(true); }} className="fixed bottom-32 right-6 w-16 h-16 bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all z-30 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
+      <button onClick={() => { 
+        setEditingTask(null); 
+        if (activeTab === 'subs') {
+          setIsSubModalOpen(true);
+        } else if (activeTab === 'calendar') {
+          setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] });
+          setIsTaskModalOpen(true);
+        } else {
+          setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] });
+          setIsTaskModalOpen(true);
+        }
+      }} className="fixed bottom-32 right-6 w-16 h-16 bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all z-30 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
       <nav className="relative z-20 bg-white border-t-4 border-black p-2 pb-6 flex justify-around">
@@ -930,6 +943,49 @@ export default function App() {
                 <button onClick={saveSub} className="w-full h-12 bg-black text-white border-2 border-black py-3 font-black uppercase">Save Subscription</button>
              </div>
            </div>
+        </div>
+      )}
+
+      {/* Date Detail Modal */}
+      {isDateDetailOpen && selectedDate && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-2xl border-4 border-black p-6 max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6 border-b-4 border-black pb-2">
+              <h2 className="font-black text-2xl uppercase italic">Tasks for {new Date(selectedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h2>
+              <button onClick={() => setIsDateDetailOpen(false)}><X className="w-8 h-8 stroke-[3]"/></button>
+            </div>
+            <div className="space-y-4">
+              {tasks.filter(t => t.dueDate === selectedDate).length > 0 ? (
+                tasks.filter(t => t.dueDate === selectedDate).map(task => (
+                  <div key={task.id} className="border-4 border-black p-4 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <button onClick={() => toggleStatus(task)}>
+                          {task.status === 'done' ? 
+                            <div className="w-8 h-8 bg-black flex items-center justify-center border-2 border-black"><CheckCircle2 className="text-white"/></div> : 
+                            <div className="w-8 h-8 border-2 border-black bg-white"></div>
+                          }
+                        </button>
+                        <div>
+                          <h3 className={`font-black uppercase text-lg ${task.status === 'done' ? 'line-through text-neutral-400' : ''}`}>{task.title}</h3>
+                          <p className="text-sm text-neutral-600 font-mono">{task.description || "No description"}</p>
+                          <PriorityBadge priority={task.priority} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-neutral-400 font-mono">No tasks scheduled for this date</div>
+              )}
+              <button 
+                onClick={() => { setTaskForm(p => ({ ...p, dueDate: selectedDate })); setEditingTask(null); setIsDateDetailOpen(false); setIsTaskModalOpen(true); }}
+                className="w-full bg-black text-white border-2 border-black py-3 font-black uppercase hover:bg-neutral-800 flex items-center justify-center gap-2"
+              >
+                <Plus className="w-5 h-5" /> Add Task for This Date
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
