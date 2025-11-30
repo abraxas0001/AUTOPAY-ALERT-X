@@ -5,7 +5,7 @@ import {
   Loader2, BrainCircuit, ChevronDown, ChevronUp, Sword, 
   Coins, Globe, Save, Upload, List, 
   CalendarDays, Check, Siren, History, AlertOctagon, 
-  Volume2, Play
+  Volume2, Play, Edit
 } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { 
@@ -693,7 +693,10 @@ export default function App() {
                         <button onClick={(e) => { e.stopPropagation(); toggleStatus(task); }}>{task.status === 'done' ? <div className="w-8 h-8 bg-black flex items-center justify-center border-2 border-black"><CheckCircle2 className="text-white"/></div> : <div className="w-8 h-8 border-2 border-black bg-white"></div>}</button>
                         <div><h3 className={`font-black uppercase text-lg ${task.status === 'done' ? 'line-through text-neutral-400' : ''}`}>{task.title}</h3><div className="flex items-center gap-2 mt-1"><PriorityBadge priority={task.priority} /></div></div>
                       </div>
-                      <div className="z-10 relative">{expandedTaskId === task.id ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}</div>
+                      <div className="z-10 relative flex items-center gap-2">
+                        <button onClick={(e) => { e.stopPropagation(); setEditingTask(task); setTaskForm({ title: task.title, description: task.description, priority: task.priority, dueDate: task.dueDate || '' }); setIsTaskModalOpen(true); }} className="p-2 hover:bg-neutral-100 border-2 border-black transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:scale-95"><Edit className="w-4 h-4" /></button>
+                        {expandedTaskId === task.id ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+                      </div>
                     </div>
                     {expandedTaskId === task.id && (<div className="mx-2 border-x-4 border-b-4 border-black bg-neutral-900 text-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)]"><p className="font-mono text-sm leading-relaxed whitespace-pre-wrap">{task.description || "No description."}</p></div>)}
                   </div>
@@ -710,7 +713,10 @@ export default function App() {
                         <button onClick={(e) => { e.stopPropagation(); toggleStatus(task); }}>{task.status === 'done' ? <div className="w-8 h-8 bg-black flex items-center justify-center border-2 border-black"><CheckCircle2 className="text-white"/></div> : <div className="w-8 h-8 border-2 border-black bg-white"></div>}</button>
                         <div><h3 className={`font-black uppercase text-lg ${task.status === 'done' ? 'line-through text-neutral-400' : ''}`}>{task.title}</h3><div className="flex items-center gap-2 mt-1"><PriorityBadge priority={task.priority} />{task.dueDate && <span className="text-[10px] font-bold bg-neutral-200 px-1 border border-black">{task.dueDate}</span>}</div></div>
                       </div>
-                      <div className="z-10 relative">{expandedTaskId === task.id ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}</div>
+                      <div className="z-10 relative flex items-center gap-2">
+                        <button onClick={(e) => { e.stopPropagation(); setEditingTask(task); setTaskForm({ title: task.title, description: task.description, priority: task.priority, dueDate: task.dueDate || '' }); setIsTaskModalOpen(true); }} className="p-2 hover:bg-neutral-100 border-2 border-black transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:scale-95"><Edit className="w-4 h-4" /></button>
+                        {expandedTaskId === task.id ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+                      </div>
                     </div>
                     {expandedTaskId === task.id && (<div className="mx-2 border-x-4 border-b-4 border-black bg-neutral-900 text-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)]"><p className="font-mono text-sm leading-relaxed whitespace-pre-wrap">{task.description || "No description."}</p></div>)}
                   </div>
@@ -901,7 +907,7 @@ export default function App() {
           setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] });
           setIsTaskModalOpen(true);
         }
-      }} className="fixed z-[90] w-16 h-16 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 bottom-24 sm:bottom-24 md:bottom-28 lg:bottom-32 right-6 sm:right-6 md:right-8 lg:right-12 xl:right-[calc(50vw-32rem)] bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
+      }} className="fixed z-[90] w-16 h-16 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 bottom-28 sm:bottom-28 md:bottom-32 lg:bottom-36 right-6 sm:right-6 md:right-8 lg:right-12 xl:right-[calc(50vw-32rem)] bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t-4 border-black p-3 pb-6 sm:p-3 sm:pb-6 md:p-4 md:pb-6 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-all duration-300 min-h-[70px]">
@@ -981,6 +987,7 @@ export default function App() {
                           <PriorityBadge priority={task.priority} />
                         </div>
                       </div>
+                      <button onClick={() => { setEditingTask(task); setTaskForm({ title: task.title, description: task.description, priority: task.priority, dueDate: task.dueDate || '' }); setIsDateDetailOpen(false); setIsTaskModalOpen(true); }} className="p-2 hover:bg-neutral-100 border-2 border-black transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:scale-95"><Edit className="w-4 h-4" /></button>
                     </div>
                   </div>
                 ))
