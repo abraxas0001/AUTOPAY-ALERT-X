@@ -36,6 +36,7 @@ export const dashboardImages = [
   '/Img/dashboard/896302.jpg',
   '/Img/dashboard/887559.jpg',
   '/Img/dashboard/unnamed7.jpg',
+  '/Img/dashboard/Chinese and japanese oriental painting with golden texture  3d render raster illustration _ Premium AI-generated image.jfif',
 ];
 
 // Tasks background images
@@ -46,6 +47,7 @@ export const tasksImages = [
   '/Img/tasks/wallpaperflare.com_wallpaper (6).jpg',
   '/Img/tasks/468739.jpg',
   '/Img/tasks/967545.jpg',
+  '/Img/tasks/Backpiece mehendi design incorporating natureinspired elements like trees and birds on a white background for transparent printing.jfif',
 ];
 
 // Calendar background images
@@ -56,6 +58,7 @@ export const calendarImages = [
   '/Img/calendar/pexels-pixabay-236950.jpg',
   '/Img/calendar/alone-tree-sunset-qe.jpg',
   '/Img/calendar/WallpaperDog-20487402.jpg',
+  '/Img/calendar/Misty Mountain Blossoms.jfif',
 ];
 
 // Subscriptions background images
@@ -76,27 +79,37 @@ export const avatarImages = [
   '/Img/avatars/652753.png',
   '/Img/avatars/792977.png',
   '/Img/avatars/900722.png',
+  '/Img/avatars/download (7).jfif',
+  '/Img/avatars/download (8).jfif',
+  '/Img/avatars/download (9).jfif',
+  '/Img/avatars/download (10).jfif',
+  '/Img/avatars/download (11).jfif',
+  '/Img/avatars/download (12).jfif',
+  '/Img/avatars/download (13).jfif',
 ];
 
 // Calendar date tile images (cycle through all)
 export const calendarDateImages = [
-  '/Img/unnamed.jpg',
-  '/Img/unnamed (1).jpg',
-  '/Img/unnamed (2).jpg',
-  '/Img/unnamed (3).jpg',
-  '/Img/unnamed (5).jpg',
-  '/Img/unnamed (6).jpg',
-  '/Img/unnamed (8).jpg',
-  '/Img/unnamed7.jpg',
-  '/Img/download.jpg',
-  '/Img/downlo.jpeg',
-  '/Img/download (2).jfif',
-  '/Img/download (3).jfif',
-  '/Img/download (4).jfif',
-  '/Img/download (5).jfif',
-  '/Img/download (5).jpeg',
-  '/Img/download (6).jfif',
-  '/Img/WALL_2022-06-28_05.02.18.png',
+  '/Img/calendar/unnamed.jpg',
+  '/Img/calendar/unnamed (1).jpg',
+  '/Img/calendar/unnamed (5).jpg',
+  '/Img/calendar/unnamed (6).jpg',
+  '/Img/calendar/unnamed (8).jpg',
+  '/Img/calendar/download.jpg',
+  '/Img/calendar/downlo.jpeg',
+  '/Img/calendar/download (2).jfif',
+  '/Img/calendar/download (3).jfif',
+  '/Img/calendar/download (4).jfif',
+  '/Img/calendar/download (5).jfif',
+  '/Img/calendar/download (5).jpeg',
+  '/Img/calendar/download (6).jfif',
+  '/Img/calendar/WALL_2022-06-28_05.02.18.png',
+  '/Img/calendar/pexels-felix-mittermeier-2832071.jpg',
+  '/Img/calendar/pexels-pixabay-221189.jpg',
+  '/Img/calendar/pexels-pixabay-236950.jpg',
+  '/Img/calendar/alone-tree-sunset-qe.jpg',
+  '/Img/calendar/WallpaperDog-20487402.jpg',
+  '/Img/calendar/Misty Mountain Blossoms.jfif',
 ];
 
 // Modal background images
