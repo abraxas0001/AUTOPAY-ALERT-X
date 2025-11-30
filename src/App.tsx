@@ -43,7 +43,7 @@ const appId = 'manga-task-manager-v1';
 const callGeminiAPI = async (prompt: string): Promise<string> => {
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -51,12 +51,16 @@ const callGeminiAPI = async (prompt: string): Promise<string> => {
       }
     );
 
-    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("API Error Details:", errorData);
+      throw new Error(`API Error: ${response.status}`);
+    }
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "System Malfunction. AI Offline.";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "AI service is currently unavailable.";
+    return "AI service is currently unavailable. Please check your API key and quota.";
   }
 };
 
@@ -875,9 +879,9 @@ export default function App() {
       <button onClick={() => { setEditingTask(null); setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] }); if (activeTab === 'subs') setIsSubModalOpen(true); else setIsTaskModalOpen(true); }} className="fixed bottom-32 right-6 w-16 h-16 bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all z-30 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
-      <nav className="relative z-20 bg-white/90 backdrop-blur-md border-t-4 border-black p-2 pb-6 flex justify-around">
+      <nav className="relative z-20 bg-white border-t-4 border-black p-2 pb-6 flex justify-around">
         {[ { id: 'dashboard', icon: LayoutDashboard, label: t.home }, { id: 'calendar', icon: CalendarIcon, label: t.cal }, { id: 'tasks', icon: Sword, label: t.tasks }, { id: 'subs', icon: Coins, label: t.subs } ].map(item => (
-          <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`flex flex-col items-center justify-center w-16 py-1 border-2 border-transparent transition-all duration-200 active:scale-90 ${activeTab === item.id ? 'bg-black text-white border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -translate-y-2' : 'text-neutral-400 hover:text-black'}`}><item.icon className="w-5 h-5 stroke-[2.5]" /><span className="text-[9px] font-black uppercase tracking-wider mt-1">{item.label}</span></button>
+          <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`flex flex-col items-center justify-center w-16 py-1 border-2 transition-all duration-200 active:scale-90 ${activeTab === item.id ? 'bg-black text-white border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -translate-y-2' : 'text-neutral-400 hover:text-black border-transparent bg-transparent'}`}><item.icon className="w-5 h-5 stroke-[2.5]" /><span className="text-[9px] font-black uppercase tracking-wider mt-1">{item.label}</span></button>
         ))}
       </nav>
 
