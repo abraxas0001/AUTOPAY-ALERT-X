@@ -37,8 +37,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // App ID logic
-const rawAppId = typeof __app_id !== 'undefined' ? __app_id : 'manga-task-manager-v1';
-const appId = rawAppId.replace(/[./]/g, '_');
+const appId = 'manga-task-manager-v1';
 
 // --- Gemini API Helper ---
 const callGeminiAPI = async (prompt: string): Promise<string> => {
@@ -304,13 +303,7 @@ export default function App() {
   // --- Auth & Data ---
   useEffect(() => {
     const initAuth = async () => {
-      // Check if we are in the preview environment which provides a token
-      if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-        await signInWithCustomToken(auth, __initial_auth_token);
-      } else {
-        // Fallback for local development
-        await signInAnonymously(auth);
-      }
+      await signInAnonymously(auth);
     };
     initAuth();
     const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -951,10 +944,10 @@ export default function App() {
              <div className="space-y-4">
                 <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Asset Name</label><input value={subForm.name} onChange={e => setSubForm({...subForm, name: e.target.value})} placeholder="SERVICE NAME (e.g. Netflix)" className="w-full border-2 border-black p-3 font-bold uppercase"/></div>
                 <div className="flex gap-4">
-                    <div className="flex-1"><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Cost</label><input type="number" value={subForm.cost} onChange={e => setSubForm({...subForm, cost: e.target.value})} placeholder="0.00" className="w-full border-2 border-black p-3 font-bold"/></div>
+                    <div className="flex-1"><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Cost</label><input type="number" value={subForm.cost} onChange={e => setSubForm({...subForm, cost: parseFloat(e.target.value) || 0})} placeholder="0.00" className="w-full border-2 border-black p-3 font-bold"/></div>
                     <div className="flex-1"><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Cycle</label><select value={subForm.cycle} onChange={e => setSubForm({...subForm, cycle: e.target.value as any})} className="w-full border-2 border-black p-3 font-bold uppercase"><option value="monthly">Monthly</option><option value="quarterly">Quarterly (4mo)</option><option value="biannual">Biannual (6mo)</option><option value="yearly">Yearly</option><option value="custom">Custom</option></select></div>
                 </div>
-                {subForm.cycle === 'custom' && (<div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Days Interval</label><input type="number" value={subForm.customDays || ''} onChange={e => setSubForm({...subForm, customDays: parseInt(e.target.value)})} className="w-full border-2 border-black p-3 font-bold" placeholder="e.g. 45"/></div>)}
+                {subForm.cycle === 'custom' && (<div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Days Interval</label><input type="number" value={subForm.customDays || ''} onChange={e => setSubForm({...subForm, customDays: parseInt(e.target.value) || 30})} className="w-full border-2 border-black p-3 font-bold" placeholder="e.g. 45"/></div>)}
                 <div className="grid grid-cols-2 gap-4">
                     <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Next Deduction</label><input type="date" value={subForm.nextBillingDate} onChange={e => setSubForm({...subForm, nextBillingDate: e.target.value})} className="w-full border-2 border-black p-3 font-mono"/></div>
                     <div><label className="block text-[10px] font-black uppercase tracking-widest mb-1">Stop Priority</label><select value={subForm.priority} onChange={e => setSubForm({...subForm, priority: e.target.value as Priority})} className="w-full border-2 border-black p-3 font-bold uppercase"><option value="low">Low (Info)</option><option value="medium">Medium (Notify)</option><option value="high">High (Alarm)</option></select></div>
