@@ -1034,7 +1034,8 @@ export default function App() {
       }} className="fixed z-[90] w-16 h-16 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 bottom-28 sm:bottom-28 md:bottom-32 lg:bottom-36 right-6 sm:right-6 md:right-8 lg:right-12 xl:right-[calc(50vw-32rem)] bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
 
       {/* Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-sm border-t-4 border-black py-3 px-4 sm:py-3 sm:px-6 md:py-4 md:px-8 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-center items-center gap-2 sm:gap-4 md:gap-6 lg:gap-8 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] transition-all duration-300">
+      <nav className="fixed bottom-0 left-0 right-0 z-[100] py-4 px-4 sm:py-4 sm:px-6 md:py-5 md:px-8 lg:max-w-screen-lg lg:mx-auto xl:max-w-screen-xl flex justify-center items-center gap-2 sm:gap-4 md:gap-6 lg:gap-8 transition-all duration-300 pointer-events-none">
+        <div className="pointer-events-auto flex gap-2 sm:gap-4 md:gap-6 lg:gap-8">
         {[ { id: 'dashboard', icon: LayoutDashboard, label: t.home }, { id: 'calendar', icon: CalendarIcon, label: t.cal }, { id: 'tasks', icon: Sword, label: t.tasks }, { id: 'subs', icon: Coins, label: t.subs } ].map(item => (
           <button 
             key={item.id} 
@@ -1049,6 +1050,7 @@ export default function App() {
             <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider mt-1">{item.label}</span>
           </button>
         ))}
+        </div>
       </nav>
 
       {/* Task Modal */}
