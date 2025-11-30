@@ -628,8 +628,8 @@ export default function App() {
           </h1>
           <div className="w-12 h-1.5 bg-black mt-1"></div>
         </div>
-        <button onClick={() => setIsProfileModalOpen(true)} className="w-12 h-12 rounded-full border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all relative bg-neutral-200">
-          <img src={profile.avatar} alt="User" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" />
+        <button onClick={() => setIsProfileModalOpen(true)} className="w-14 h-14 rounded-full border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all relative bg-neutral-200 p-0">
+          <img src={profile.avatar} alt="User" className="w-full h-full object-cover" />
         </button>
       </header>
 
@@ -872,12 +872,12 @@ export default function App() {
       )}
 
       {/* Task Creator FAB */}
-      <button onClick={() => { setEditingTask(null); setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] }); if (activeTab === 'subs') setIsSubModalOpen(true); else setIsTaskModalOpen(true); }} className="fixed bottom-24 right-6 w-16 h-16 bg-black border-4 border-white text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all z-20 active:bg-neutral-800"><Plus className="w-8 h-8 stroke-[3]" /></button>
+      <button onClick={() => { setEditingTask(null); setTaskForm({ title: '', description: '', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] }); if (activeTab === 'subs') setIsSubModalOpen(true); else setIsTaskModalOpen(true); }} className="fixed bottom-24 right-6 w-20 h-20 bg-black border-4 border-black text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all z-20 active:bg-neutral-800"><Plus className="w-10 h-10 stroke-[4]" /></button>
 
       {/* Navigation */}
-      <nav className="relative z-20 bg-white border-t-4 border-black p-2 pb-6 flex justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+      <nav className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t-4 border-black p-3 pb-6 flex justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
         {[ { id: 'dashboard', icon: LayoutDashboard, label: t.home }, { id: 'calendar', icon: CalendarIcon, label: t.cal }, { id: 'tasks', icon: Sword, label: t.tasks }, { id: 'subs', icon: Coins, label: t.subs } ].map(item => (
-          <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`flex flex-col items-center justify-center w-16 py-1 border-2 border-transparent transition-all ${activeTab === item.id ? 'bg-black text-white border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -translate-y-2' : 'text-neutral-400 hover:text-black'}`}><item.icon className="w-5 h-5 stroke-[2.5]" /><span className="text-[9px] font-black uppercase tracking-wider mt-1">{item.label}</span></button>
+          <button key={item.id} onClick={() => setActiveTab(item.id as Tab)} className={`flex flex-col items-center justify-center w-20 py-2 border-2 transition-all ${activeTab === item.id ? 'bg-black text-white border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'text-neutral-400 hover:text-black border-transparent'}`}><item.icon className="w-6 h-6 stroke-[2.5]" /><span className="text-[9px] font-black uppercase tracking-wider mt-1">{item.label}</span></button>
         ))}
       </nav>
 
