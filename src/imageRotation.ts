@@ -41,9 +41,9 @@ export const getCurrentImage = (images: string[], fallback: string = ''): string
   return validImages[index];
 };
 
-// Fallback images (always available)
-const FALLBACK_IMAGE = '/Img/dashboard/wallpaperflare.com_wallpaper (4).jpg';
-const FALLBACK_AVATAR = '/Img/avatars/Peace of mind.jpeg';
+// Fallback images (using first available from arrays)
+const FALLBACK_IMAGE = '/Img/dashboard/landscape/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg';
+const FALLBACK_AVATAR = '/Img/avatars/unnamed (4).jfif';
 
 // Get current image with fallback to next available if missing
 export const getCurrentImageWithFallback = (images: string[]): string => {
@@ -121,19 +121,9 @@ export const subscriptionsPortraitImages = [
 
 // Avatar options
 export const avatarImages = [
-  '/Img/avatars/Peace of mind.jpeg',
   '/Img/avatars/unnamed (4).jfif',
-  '/Img/avatars/120600.png',
-  '/Img/avatars/652753.png',
-  '/Img/avatars/792977.png',
-  '/Img/avatars/900722.png',
-  '/Img/avatars/download (7).jfif',
-  '/Img/avatars/download (8).jfif',
-  '/Img/avatars/download (9).jfif',
-  '/Img/avatars/download (10).jfif',
-  '/Img/avatars/download (11).jfif',
-  '/Img/avatars/download (12).jfif',
-  '/Img/avatars/download (13).jfif',
+  '/Img/avatars/543497.jpg',
+  '/Img/avatars/543509.jpg',
 ];
 
 // Calendar date tile images (cycle through all)
@@ -166,9 +156,9 @@ export const todayImages = [
 
 // Banner images for dark sections (Daily Briefing, Stats, etc.)
 export const dashboardBannerImages = [
-  '/Img/dashboard/banners/unnamed7.jpg',
-  '/Img/dashboard/banners/887559.jpg',
-  '/Img/dashboard/banners/896302.jpg',
+  '/Img/dashboard/banners/Nature Aesthetic.jfif',
+  '/Img/dashboard/banners/download (16).jfif',
+  '/Img/dashboard/banners/download (17).jfif',
 ];
 
 export const tasksBannerImages = [
@@ -191,16 +181,16 @@ export const subscriptionsBannerImages = [
 
 // Modal background images
 export const modalImages = [
-  '/Img/dashboard/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
-  '/Img/dashboard/896302.jpg',
-  '/Img/dashboard/887559.jpg',
+  '/Img/dashboard/landscape/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
+  '/Img/dashboard/landscape/896302.jpg',
+  '/Img/dashboard/landscape/887559.jpg',
 ];
 
 // Loading screen images
 export const loadingImages = [
-  '/Img/dashboard/wallpaperflare.com_wallpaper (4).jpg',
-  '/Img/dashboard/wallpaperflare.com_wallpaper (5).jpg',
-  '/Img/dashboard/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
+  '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (4).jpg',
+  '/Img/dashboard/landscape/wallpaperflare.com_wallpaper (5).jpg',
+  '/Img/dashboard/landscape/391829-chrollo-hunter-x-hunter-4k-pc-wallpaper.jpg',
 ];
 
 // Hook to get current images with auto-refresh every 30 minutes
