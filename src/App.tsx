@@ -157,8 +157,34 @@ const BrandIcon = ({ name, className }: { name: string, className?: string }) =>
   );
 };
 
-const AlarmOverlay = ({ activeAlarms, onDismiss }: { activeAlarms: Subscription[], onDismiss: () => void }) => {
+const AlarmOverlay = ({ activeAlarms, onDismiss, alarmSound }: { activeAlarms: Subscription[], onDismiss: () => void, alarmSound: string }) => {
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  React.useEffect(() => {
+    if (activeAlarms.length > 0 && alarmSound && alarmSound !== 'custom') {
+      audioRef.current = new Audio(alarmSound);
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.5;
+      audioRef.current.play().catch(e => console.log("Alarm audio error:", e));
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [activeAlarms.length, alarmSound]);
+
   if (activeAlarms.length === 0) return null;
+
+  const handleDismiss = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    onDismiss();
+  };
 
   return (
     <div className="fixed inset-0 z-[9999] bg-red-600/95 flex flex-col items-center justify-center text-white animate-in fade-in duration-200 backdrop-blur-md p-6 text-center">
@@ -192,7 +218,7 @@ const AlarmOverlay = ({ activeAlarms, onDismiss }: { activeAlarms: Subscription[
       </div>
 
       <button 
-        onClick={onDismiss}
+        onClick={handleDismiss}
         className="bg-white text-red-600 px-10 py-5 rounded-full font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform flex items-center gap-3"
       >
         <AlertOctagon className="w-6 h-6"/> DISMISS ALARM
@@ -250,7 +276,7 @@ export default function App() {
     currency: '$',
     language: 'en',
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    alarmSound: 'radar'
+    alarmSound: '/music/Piano.mp3'
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -515,11 +541,12 @@ export default function App() {
   };
 
   const playPreviewSound = () => {
-      if (profile.alarmSound && profile.alarmSound.startsWith('data:audio')) {
+      if (profile.alarmSound && profile.alarmSound !== 'custom') {
           const audio = new Audio(profile.alarmSound);
+          audio.volume = 0.5; // Set volume to 50%
           audio.play().catch(e => console.log("Audio play error", e));
       } else {
-          alert(`Playing preview for: ${profile.alarmSound}`);
+          alert(`Please select an alarm sound first`);
       }
   };
 
@@ -637,7 +664,7 @@ export default function App() {
     <div className="flex flex-col h-screen min-w-[320px] min-h-[400px] bg-neutral-100 text-neutral-900 font-sans selection:bg-black selection:text-white overflow-hidden relative">
       
       {/* Alarm Overlay */}
-      <AlarmOverlay activeAlarms={activeAlarms} onDismiss={() => setActiveAlarms([])} />
+      <AlarmOverlay activeAlarms={activeAlarms} onDismiss={() => setActiveAlarms([])} alarmSound={profile.alarmSound} />
 
       {/* Notifications */}
       {notificationMsg && (
@@ -923,9 +950,12 @@ export default function App() {
                     <label className="block text-[10px] font-black uppercase tracking-widest mb-1 flex items-center gap-1"><Volume2 className="w-3 h-3"/> Alarm Sound</label>
                     <div className="flex gap-2">
                         <select value={profile.alarmSound} onChange={e => setProfile({...profile, alarmSound: e.target.value})} className="flex-1 bg-neutral-100 border-2 border-black p-2 font-bold text-xs">
-                            <option value="radar">Radar (Default)</option>
-                            <option value="siren">Siren</option>
-                            <option value="cosmic">Cosmic</option>
+                            <option value="/music/Piano.mp3">Piano</option>
+                            <option value="/music/Hugo Boss.mp3">Hugo Boss</option>
+                            <option value="/music/Mi gente ringtone .mp3">Mi Gente</option>
+                            <option value="/music/One dance.mp3">One Dance</option>
+                            <option value="/music/Talk dirty to me.mp3">Talk Dirty</option>
+                            <option value="/music/Turkish Music.mp3">Turkish Music</option>
                             <option value="custom">Custom Upload...</option>
                         </select>
                         {profile.alarmSound === 'custom' && (
