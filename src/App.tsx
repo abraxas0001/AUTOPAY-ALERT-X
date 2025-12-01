@@ -845,7 +845,7 @@ export default function App() {
                          </p>
                          <button 
                            onClick={() => setShowFullBriefing(true)}
-                           className="text-xs font-black uppercase tracking-wider text-white/80 hover:text-white flex items-center gap-1 transition-colors"
+                           className="bg-purple-500/80 text-white px-3 py-1.5 rounded text-xs font-black uppercase tracking-wider hover:bg-purple-600/80 flex items-center gap-1 transition-colors"
                          >
                            <ChevronDown className="w-3 h-3" /> Detailed Report
                          </button>
@@ -862,11 +862,13 @@ export default function App() {
                                const trimmed = line.trim();
                                if (!trimmed) return null;
                                
-                               // Remove markdown symbols
+                               // Aggressive markdown removal - humans don't use * like this
                                const cleaned = trimmed
-                                 .replace(/^\*\*(.+?)\*\*:?/g, '$1:') // Remove bold **text**
-                                 .replace(/^\* /g, '• ') // Convert * to bullet
-                                 .replace(/^- /g, '• '); // Convert - to bullet
+                                 .replace(/\*\*(.+?)\*\*/g, '$1') // Remove all **bold**
+                                 .replace(/\*(.+?)\*/g, '$1') // Remove all *italic*
+                                 .replace(/^\* /g, '') // Remove leading * bullet
+                                 .replace(/^- /g, '') // Remove leading - bullet
+                                 .replace(/^• /g, ''); // Remove leading • bullet
                                
                                return <p key={idx} className="leading-relaxed">{cleaned}</p>;
                              })}
@@ -874,7 +876,7 @@ export default function App() {
                          </div>
                          <button 
                            onClick={() => setShowFullBriefing(false)}
-                           className="text-xs font-black uppercase tracking-wider text-white/80 hover:text-white flex items-center gap-1 transition-colors mt-3"
+                           className="bg-purple-500/80 text-white px-3 py-1.5 rounded text-xs font-black uppercase tracking-wider hover:bg-purple-600/80 flex items-center gap-1 transition-colors mt-3"
                          >
                            <ChevronUp className="w-3 h-3" /> Collapse
                          </button>
@@ -1055,18 +1057,20 @@ export default function App() {
                                   const trimmed = line.trim();
                                   if (!trimmed) return null;
                                   
-                                  // Remove markdown symbols and clean up
+                                  // Aggressive markdown removal - humans don't use * like this
                                   const cleaned = trimmed
-                                    .replace(/^\*\*(.+?)\*\*:?/g, '$1:') // Remove bold **text**
-                                    .replace(/^\* /g, '• ') // Convert * to bullet
-                                    .replace(/^- /g, '• '); // Convert - to bullet
+                                    .replace(/\*\*(.+?)\*\*/g, '$1') // Remove all **bold**
+                                    .replace(/\*(.+?)\*/g, '$1') // Remove all *italic*
+                                    .replace(/^\* /g, '') // Remove leading * bullet
+                                    .replace(/^- /g, '') // Remove leading - bullet
+                                    .replace(/^• /g, ''); // Remove leading • bullet
                                   
                                   return <p key={idx} className="leading-relaxed">{cleaned}</p>;
                                 })}
                               </div>
                               <button 
                                 onClick={() => setExpandedSubAnalysis(null)}
-                                className="text-xs font-bold uppercase tracking-wider text-purple-600 hover:text-purple-800 flex items-center gap-1 transition-colors mt-3"
+                                className="bg-purple-500/80 text-white px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider hover:bg-purple-600/80 flex items-center gap-1 transition-colors mt-3"
                               >
                                 <ChevronUp className="w-3 h-3" /> Collapse
                               </button>
@@ -1078,17 +1082,20 @@ export default function App() {
                                 {(() => {
                                   const lines = sub.description.split('\n').filter(line => line.trim());
                                   return lines.slice(0, 5).map((line, idx) => {
+                                    // Aggressive markdown removal
                                     const cleaned = line
-                                      .replace(/^\*\*(.+?)\*\*:?/g, '$1:')
-                                      .replace(/^\* /g, '• ')
-                                      .replace(/^- /g, '• ');
+                                      .replace(/\*\*(.+?)\*\*/g, '$1')
+                                      .replace(/\*(.+?)\*/g, '$1')
+                                      .replace(/^\* /g, '')
+                                      .replace(/^- /g, '')
+                                      .replace(/^• /g, '');
                                     return <p key={idx}>{cleaned}</p>;
                                   });
                                 })()}
                               </div>
                               <button 
                                 onClick={() => setExpandedSubAnalysis(sub.id)}
-                                className="text-xs font-bold uppercase tracking-wider text-purple-600 hover:text-purple-800 flex items-center gap-1 transition-colors"
+                                className="bg-purple-500/80 text-white px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider hover:bg-purple-600/80 flex items-center gap-1 transition-colors"
                               >
                                 <ChevronDown className="w-3 h-3" /> More Details
                               </button>
