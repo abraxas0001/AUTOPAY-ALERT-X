@@ -819,8 +819,8 @@ export default function App() {
 
       <main className="relative z-20 flex-1 overflow-y-auto pb-24 sm:pb-24 md:pb-28 lg:pb-32 px-4 pt-6 scrollbar-hide">
         {activeTab === 'dashboard' && (
-          <div className="space-y-10">
-            {/* Briefing */}
+          <div className="space-y-6">
+            {/* Briefing Image */}
             <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)] relative overflow-hidden group min-h-[200px] flex flex-col justify-between">
                <div className={`absolute inset-0 z-0 opacity-60 transition-all duration-500 ${dailyBriefing ? 'blur-sm' : 'blur-none'}`}>
                  <img src="/Img/dashboard/banners/294071.jpg" alt="Insight" className="w-full h-full object-cover grayscale" onError={() => handleImageError('dashboardBanner')} />
@@ -834,8 +834,8 @@ export default function App() {
                    </div>
                  )}
                </div>
-               <div className="relative z-10 p-5 pt-0">
-                 {dailyBriefing ? (
+               {dailyBriefing && (
+                 <div className="relative z-10 p-5 pt-0">
                    <div className="animate-in fade-in slide-in-from-bottom-2">
                      {!showFullBriefing ? (
                        // Short version
@@ -857,9 +857,20 @@ export default function App() {
                            {dailyBriefing.split('|||')[0].replace('SHORT:', '')}
                          </p>
                          <div className="mt-4 pt-4 border-t border-white/20">
-                           <p className="text-sm text-white/90 leading-relaxed whitespace-pre-line">
-                             {dailyBriefing.split('|||')[1]?.replace('DETAILED:', '') || ''}
-                           </p>
+                           <div className="text-sm text-white/90 leading-relaxed space-y-2">
+                             {dailyBriefing.split('|||')[1]?.replace('DETAILED:', '').split('\n').map((line, idx) => {
+                               const trimmed = line.trim();
+                               if (!trimmed) return null;
+                               
+                               // Remove markdown symbols
+                               const cleaned = trimmed
+                                 .replace(/^\*\*(.+?)\*\*:?/g, '$1:') // Remove bold **text**
+                                 .replace(/^\* /g, '• ') // Convert * to bullet
+                                 .replace(/^- /g, '• '); // Convert - to bullet
+                               
+                               return <p key={idx} className="leading-relaxed">{cleaned}</p>;
+                             })}
+                           </div>
                          </div>
                          <button 
                            onClick={() => setShowFullBriefing(false)}
@@ -870,12 +881,23 @@ export default function App() {
                        </div>
                      )}
                    </div>
-                 ) : (
-                   <button onClick={handleDailyBriefing} disabled={isGeneratingBriefing} className="w-full bg-white text-black py-3 font-black uppercase flex items-center justify-center gap-2 border-2 border-transparent transition-all active:scale-[0.98]">{isGeneratingBriefing ? <Loader2 className="w-5 h-5 animate-spin"/> : <Sparkles className="w-5 h-5"/>}{isGeneratingBriefing ? "ANALYZING..." : "INITIALIZE REPORT"}</button>
-                 )}
-               </div>
+                 </div>
+               )}
             </div>
-            {/* Stats */}
+
+            {/* Initialize Report Button - Below Image */}
+            {!dailyBriefing && (
+              <button 
+                onClick={handleDailyBriefing} 
+                disabled={isGeneratingBriefing} 
+                className="w-full bg-white text-black py-4 font-black uppercase flex items-center justify-center gap-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all active:scale-[0.98]"
+              >
+                {isGeneratingBriefing ? <Loader2 className="w-5 h-5 animate-spin"/> : <Sparkles className="w-5 h-5"/>}
+                {isGeneratingBriefing ? "ANALYZING..." : "INITIALIZE REPORT"}
+              </button>
+            )}
+
+            {/* Stats - Below Initialize Button */}
             <div className="grid grid-cols-2 gap-4">
               <div onClick={() => setActiveTab('tasks')} className="bg-white texture-pattern-paper border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer active:scale-[0.98] transition-transform hover:bg-neutral-50">
                 <p className="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-2">Tasks</p>
@@ -1028,9 +1050,20 @@ export default function App() {
                           {expandedSubAnalysis === sub.id ? (
                             // Detailed view
                             <div className="bg-purple-50 p-3 border border-purple-200 text-purple-900 rounded">
-                              <p className="text-sm leading-relaxed whitespace-pre-line">
-                                {sub.description}
-                              </p>
+                              <div className="text-sm leading-relaxed space-y-2">
+                                {sub.description.split('\n').map((line, idx) => {
+                                  const trimmed = line.trim();
+                                  if (!trimmed) return null;
+                                  
+                                  // Remove markdown symbols and clean up
+                                  const cleaned = trimmed
+                                    .replace(/^\*\*(.+?)\*\*:?/g, '$1:') // Remove bold **text**
+                                    .replace(/^\* /g, '• ') // Convert * to bullet
+                                    .replace(/^- /g, '• '); // Convert - to bullet
+                                  
+                                  return <p key={idx} className="leading-relaxed">{cleaned}</p>;
+                                })}
+                              </div>
                               <button 
                                 onClick={() => setExpandedSubAnalysis(null)}
                                 className="text-xs font-bold uppercase tracking-wider text-purple-600 hover:text-purple-800 flex items-center gap-1 transition-colors mt-3"
@@ -1041,12 +1074,18 @@ export default function App() {
                           ) : (
                             // Short view - show first 5 lines
                             <div className="bg-purple-50 p-3 border border-purple-200 text-purple-900 rounded">
-                              <p className="text-sm leading-relaxed whitespace-pre-line mb-2">
+                              <div className="text-sm leading-relaxed space-y-1 mb-2">
                                 {(() => {
                                   const lines = sub.description.split('\n').filter(line => line.trim());
-                                  return lines.slice(0, 5).join('\n');
+                                  return lines.slice(0, 5).map((line, idx) => {
+                                    const cleaned = line
+                                      .replace(/^\*\*(.+?)\*\*:?/g, '$1:')
+                                      .replace(/^\* /g, '• ')
+                                      .replace(/^- /g, '• ');
+                                    return <p key={idx}>{cleaned}</p>;
+                                  });
                                 })()}
-                              </p>
+                              </div>
                               <button 
                                 onClick={() => setExpandedSubAnalysis(sub.id)}
                                 className="text-xs font-bold uppercase tracking-wider text-purple-600 hover:text-purple-800 flex items-center gap-1 transition-colors"
