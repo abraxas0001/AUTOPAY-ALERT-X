@@ -5,7 +5,7 @@ import {
   Loader2, BrainCircuit, ChevronDown, ChevronUp, Sword, 
   Coins, Globe, Save, Upload, List, 
   CalendarDays, Check, Siren, History, AlertOctagon, 
-  Volume2, Play, Edit, Pause
+  Volume2, Play, Edit, Pause, RefreshCw
 } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { 
@@ -15,7 +15,9 @@ import {
   getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, 
   query, orderBy, serverTimestamp, setDoc, getDoc
 } from 'firebase/firestore';
+import ReactMarkdown from 'react-markdown';
 import { useRotatingImages, calendarDateImages } from './imageRotation';
+import { formatAIResponse } from './utils/formatting';
 
 // --- CONFIGURATION ---
 
@@ -274,9 +276,9 @@ export default function App() {
   const [profile, setProfile] = useState<UserProfile>({
     name: 'User',
     avatar: currentRotation.avatar || mangaArt.default_avatar,
-    currency: '$',
+    currency: '₹',
     language: 'en',
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    timezone: 'Asia/Kolkata',
     alarmSound: '/music/Piano.mp3'
   });
 
@@ -325,7 +327,7 @@ export default function App() {
   const [subForm, setSubForm] = useState<Partial<Subscription>>({ 
     name: '', 
     cost: 0, 
-    currency: '$', 
+    currency: '₹', 
     cycle: 'monthly', 
     nextBillingDate: new Date().toISOString().split('T')[0],
     category: 'Entertainment',
@@ -587,8 +589,9 @@ export default function App() {
   const handleAiSubAnalysis = async () => {
     if(!subForm.name?.trim()) return;
     setIsAiGenerating(true);
-    const text = await callGeminiAPI(`Analyze subscription "${subForm.name}" at ${subForm.cost}. Worth it? Alternatives? Brief. Language: ${profile.language}`);
-    setSubForm(p => ({...p, description: text}));
+    const text = await callGeminiAPI(`Analyze subscription "${subForm.name}" at ${subForm.cost}. Provide key points: Is it worth it? What are alternatives? Be concise. Language: ${profile.language}`);
+    const formatted = formatAIResponse(text);
+    setSubForm(p => ({...p, description: formatted}));
     setIsAiGenerating(false);
   };
 
@@ -596,11 +599,25 @@ export default function App() {
     setIsGeneratingBriefing(true);
     const pendingCount = tasks.filter(t => t.status !== 'done').length;
     const subTotal = totalMonthlyCost.toFixed(0);
-    const prompt = `Briefing: ${pendingCount} tasks, ${profile.currency}${subTotal} monthly burn. 2 sentences. Anime commander style. Language: ${profile.language}`;
+    const prompt = `Briefing: ${pendingCount} tasks, ${profile.currency}${subTotal} monthly burn. Provide concise analysis with key points and recommendations. Anime commander style. Language: ${profile.language}`;
     const text = await callGeminiAPI(prompt);
-    setDailyBriefing(text);
+    const formatted = formatAIResponse(text);
+    setDailyBriefing(formatted);
     setIsGeneratingBriefing(false);
   };
+
+  // Auto-generate daily briefing when tasks or subscriptions change
+  useEffect(() => {
+    // Only auto-generate if user is on dashboard and briefing is already visible
+    if (activeTab === 'dashboard' && dailyBriefing && !isGeneratingBriefing) {
+      // Debounce the generation to avoid too many API calls
+      const timer = setTimeout(() => {
+        handleDailyBriefing();
+      }, 1000); // Wait 1 second after last change
+      
+      return () => clearTimeout(timer);
+    }
+  }, [tasks, subscriptions, activeTab]);
 
   const handleTestAlarm = () => {
     const dummySub: Subscription = {
@@ -638,7 +655,7 @@ export default function App() {
         cost: parseFloat(subForm.cost?.toString() || '0') 
     });
     setIsSubModalOpen(false);
-    setSubForm({ name: '', cost: 0, currency: '$', cycle: 'monthly', nextBillingDate: new Date().toISOString().split('T')[0], category: 'Entertainment', description: '', priority: 'medium', customDays: 30 });
+    setSubForm({ name: '', cost: 0, currency: '₹', cycle: 'monthly', nextBillingDate: new Date().toISOString().split('T')[0], category: 'Entertainment', description: '', priority: 'medium', customDays: 30 });
   };
 
   const toggleStatus = async (t: Task) => { await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'tasks', t.id), { status: t.status === 'done' ? 'todo' : 'done' }); };
@@ -646,7 +663,26 @@ export default function App() {
   
   const deleteHistoryItem = async (subId: string, historyId: string) => {
     if (!user) return;
+    
+    // Get the subscription to access its cycle information
+    const sub = subscriptions.find(s => s.id === subId);
+    if (!sub) return;
+    
+    // Delete the payment record
     await deleteDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'subscriptions', subId, 'history', historyId));
+    
+    // Recalculate next billing date by going back one cycle
+    const d = new Date(sub.nextBillingDate);
+    if(sub.cycle === 'monthly') d.setMonth(d.getMonth() - 1);
+    else if(sub.cycle === 'yearly') d.setFullYear(d.getFullYear() - 1);
+    else if(sub.cycle === 'quarterly') d.setMonth(d.getMonth() - 3);
+    else if(sub.cycle === 'biannual') d.setMonth(d.getMonth() - 6);
+    else if(sub.cycle === 'custom' && sub.customDays) d.setDate(d.getDate() - sub.customDays);
+    
+    // Update the subscription with the new billing date
+    await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'subscriptions', subId), { 
+      nextBillingDate: d.toISOString().split('T')[0] 
+    });
   };
 
   const renewSub = async (sub: Subscription) => {
@@ -757,6 +793,9 @@ export default function App() {
           />
         </div>
         
+        {/* Gradient Overlay for Text Visibility */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+        
         <div className="relative z-10 flex flex-col">
           <h1 className="text-3xl font-black italic tracking-tighter uppercase leading-none transform -skew-x-6 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] text-white">
             {activeTab === 'dashboard' && t.home}
@@ -766,23 +805,32 @@ export default function App() {
           </h1>
           <div className="w-12 h-1.5 bg-white mt-1 shadow-md"></div>
         </div>
-        <button onClick={() => setIsProfileModalOpen(true)} className="relative z-10 w-14 h-14 rounded-full border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all bg-neutral-200 p-0 group">
-          <img src={profile.avatar} alt="User" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" />
+        <button onClick={() => setIsProfileModalOpen(true)} className="relative z-10 w-20 h-20 rounded-full border-4 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all bg-neutral-200 p-0 group">
+          <img src={profile.avatar} alt="User" className="w-full h-full object-cover group-hover:grayscale group-active:grayscale transition-all duration-300" />
         </button>
       </header>
 
       <main className="relative z-20 flex-1 overflow-y-auto pb-24 sm:pb-24 md:pb-28 lg:pb-32 px-4 pt-6 scrollbar-hide">
         {activeTab === 'dashboard' && (
-          <div className="space-y-8">
+          <div className="space-y-10">
             {/* Briefing */}
             <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)] relative overflow-hidden group min-h-[200px] flex flex-col justify-between">
                <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-1000"><img src="/Img/dashboard/banners/294071.jpg" alt="Insight" className="w-full h-full object-cover grayscale" onError={() => handleImageError('dashboardBanner')} /></div>
                <div className="relative z-10 p-5 flex justify-between items-start">
                  <div className="flex items-center gap-2 text-white"><BrainCircuit className="w-6 h-6" /><h3 className="font-black uppercase tracking-[0.2em] text-lg">{t.brief}</h3></div>
-                 {dailyBriefing && <button onClick={() => setDailyBriefing(null)}><X className="w-5 h-5"/></button>}
+                 {dailyBriefing && (
+                   <div className="flex gap-2">
+                     <button onClick={handleDailyBriefing} disabled={isGeneratingBriefing} className="p-1 hover:bg-white/20 rounded transition-colors" title="Regenerate"><RefreshCw className={`w-5 h-5 ${isGeneratingBriefing ? 'animate-spin' : ''}`}/></button>
+                     <button onClick={() => setDailyBriefing(null)}><X className="w-5 h-5"/></button>
+                   </div>
+                 )}
                </div>
                <div className="relative z-10 p-5 pt-0">
-                 {dailyBriefing ? (<p className="font-mono text-sm leading-relaxed whitespace-pre-line animate-in fade-in slide-in-from-bottom-2 border-l-4 border-white pl-4">{dailyBriefing}</p>) : (
+                 {dailyBriefing ? (
+                   <div className="prose prose-invert prose-sm max-w-none animate-in fade-in slide-in-from-bottom-2 border-l-4 border-white pl-4">
+                     <ReactMarkdown>{dailyBriefing}</ReactMarkdown>
+                   </div>
+                 ) : (
                    <button onClick={handleDailyBriefing} disabled={isGeneratingBriefing} className="w-full bg-white text-black py-3 font-black uppercase flex items-center justify-center gap-2 border-2 border-transparent transition-all active:scale-[0.98]">{isGeneratingBriefing ? <Loader2 className="w-5 h-5 animate-spin"/> : <Sparkles className="w-5 h-5"/>}{isGeneratingBriefing ? "ANALYZING..." : "INITIALIZE REPORT"}</button>
                  )}
                </div>
@@ -933,7 +981,14 @@ export default function App() {
                         )}
                       </div>
                       {sub.description && (
-                        <><div className="flex items-center gap-2 mb-1 text-purple-600 font-bold uppercase tracking-widest"><BrainCircuit className="w-3 h-3"/> AI Analysis</div><p className="leading-relaxed bg-purple-50 p-2 border border-purple-200 text-purple-900">{sub.description}</p></>
+                        <>
+                          <div className="flex items-center gap-2 mb-1 text-purple-600 font-bold uppercase tracking-widest">
+                            <BrainCircuit className="w-3 h-3"/> AI Analysis
+                          </div>
+                          <div className="prose prose-sm max-w-none leading-relaxed bg-purple-50 p-2 border border-purple-200 text-purple-900">
+                            <ReactMarkdown>{sub.description}</ReactMarkdown>
+                          </div>
+                        </>
                       )}
                     </div>
                   )}
