@@ -79,10 +79,17 @@
    npm install
    ```
 
-3. **Configure Environment**
-   - Update API keys in `src/App.tsx`:
-     - Gemini API Key
-     - Firebase configuration
+3. **Configure Environment Variables**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   ```
+   
+   Then update `.env` with your API keys:
+   - **Gemini API Key**: Get from [Google AI Studio](https://aistudio.google.com/app/apikey)
+   - **Firebase Config**: Get from your [Firebase Console](https://console.firebase.google.com/)
+   
+   ⚠️ **IMPORTANT**: Never commit `.env` to git! It's already in `.gitignore`.
 
 4. **Start Development Server**
    ```bash
@@ -163,24 +170,47 @@ autopay-alert-x-next-todo/
 
 ## 🔧 Configuration
 
-### Firebase Setup
-Replace the Firebase config in `src/App.tsx` with your project credentials:
+### Environment Variables
 
-```typescript
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  // ... other config
-};
+All sensitive configuration is managed through environment variables in the `.env` file:
+
+```bash
+# Gemini API Configuration
+VITE_GEMINI_API_KEY=your-gemini-api-key-here
+
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=your-firebase-api-key-here
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
 ```
 
-### Gemini AI Integration
-Update the API key in `src/App.tsx`:
+### 🔐 Security Best Practices
 
-```typescript
-const apiKey = "your-gemini-api-key";
-```
+1. **Never commit `.env` to version control** - It's already in `.gitignore`
+2. **Use different API keys for development and production**
+3. **Restrict API keys** in Google Cloud Console:
+   - Set HTTP referrer restrictions
+   - Limit API access to only required services
+4. **Rotate keys regularly** if they're exposed
+5. **Monitor API usage** in Google Cloud Console
+
+### Getting API Keys
+
+#### Gemini API Key
+1. Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Click "Create API Key"
+3. Copy the key to your `.env` file
+4. Set up API restrictions in [Google Cloud Console](https://console.cloud.google.com/)
+
+#### Firebase Configuration
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Select your project (or create a new one)
+3. Go to Project Settings → General
+4. Scroll to "Your apps" and copy the config values
+5. Add them to your `.env` file
 
 ## 🤝 Contributing
 
