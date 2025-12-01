@@ -291,7 +291,8 @@ export default function App() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
   const [subHistory, setSubHistory] = useState<PaymentHistory[]>([]);
-  const [showRemaining, setShowRemaining] = useState(false); 
+  const [showRemaining, setShowRemaining] = useState(false);
+  const [expandedSubAnalysis, setExpandedSubAnalysis] = useState<string | null>(null); 
   
   // Alarm State
   const [activeAlarms, setActiveAlarms] = useState<Subscription[]>([]);
@@ -309,6 +310,7 @@ export default function App() {
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [dailyBriefing, setDailyBriefing] = useState<string | null>(null);
   const [isGeneratingBriefing, setIsGeneratingBriefing] = useState(false);
+  const [showFullBriefing, setShowFullBriefing] = useState(false);
 
   // Image error handler - prevents crashes when images are deleted
   const handleImageError = (imageType: string) => {
@@ -599,11 +601,20 @@ export default function App() {
     setIsGeneratingBriefing(true);
     const pendingCount = tasks.filter(t => t.status !== 'done').length;
     const subTotal = totalMonthlyCost.toFixed(0);
-    const prompt = `Briefing: ${pendingCount} tasks, ${profile.currency}${subTotal} monthly burn. Provide concise analysis with key points and recommendations. Anime commander style. Language: ${profile.language}`;
-    const text = await callGeminiAPI(prompt);
-    const formatted = formatAIResponse(text);
-    setDailyBriefing(formatted);
+    
+    // Generate a short, motivational commander-style message
+    const shortPrompt = `You are a tactical commander briefing your team. ${pendingCount} tasks pending, ${profile.currency}${subTotal} monthly expenses. Give ONE powerful, motivating sentence (max 15 words) about the mission status. Be direct, confident, and inspiring like a military commander. Language: ${profile.language}`;
+    const shortText = await callGeminiAPI(shortPrompt);
+    
+    // Generate detailed analysis
+    const detailedPrompt = `Detailed tactical briefing: ${pendingCount} tasks pending, ${profile.currency}${subTotal} monthly burn. Provide strategic analysis with key points, priorities, and actionable recommendations. Use military/tactical language. Be concise but thorough. Language: ${profile.language}`;
+    const detailedText = await callGeminiAPI(detailedPrompt);
+    const formatted = formatAIResponse(detailedText);
+    
+    // Store both versions separated by a marker
+    setDailyBriefing(`SHORT:${shortText.trim()}|||DETAILED:${formatted}`);
     setIsGeneratingBriefing(false);
+    setShowFullBriefing(false);
   };
 
   // Auto-generate daily briefing when tasks or subscriptions change
@@ -827,8 +838,40 @@ export default function App() {
                </div>
                <div className="relative z-10 p-5 pt-0">
                  {dailyBriefing ? (
-                   <div className="prose prose-invert prose-sm max-w-none animate-in fade-in slide-in-from-bottom-2 border-l-4 border-white pl-4">
-                     <ReactMarkdown>{dailyBriefing}</ReactMarkdown>
+                   <div className="animate-in fade-in slide-in-from-bottom-2">
+                     {!showFullBriefing ? (
+                       // Short version
+                       <div className="border-l-4 border-white pl-4">
+                         <p className="text-lg font-bold text-white leading-relaxed mb-3">
+                           {dailyBriefing.split('|||')[0].replace('SHORT:', '')}
+                         </p>
+                         <button 
+                           onClick={() => setShowFullBriefing(true)}
+                           className="text-xs font-black uppercase tracking-wider text-white/80 hover:text-white flex items-center gap-1 transition-colors"
+                         >
+                           <ChevronDown className="w-3 h-3" /> Detailed Report
+                         </button>
+                       </div>
+                     ) : (
+                       // Detailed version
+                       <div className="border-l-4 border-white pl-4">
+                         <div className="flex justify-between items-start mb-3">
+                           <p className="text-lg font-bold text-white leading-relaxed">
+                             {dailyBriefing.split('|||')[0].replace('SHORT:', '')}
+                           </p>
+                           <button 
+                             onClick={() => setShowFullBriefing(false)}
+                             className="text-white/80 hover:text-white transition-colors"
+                             title="Collapse"
+                           >
+                             <ChevronUp className="w-5 h-5" />
+                           </button>
+                         </div>
+                         <div className="prose prose-invert prose-sm max-w-none mt-4 pt-4 border-t border-white/20">
+                           <ReactMarkdown>{dailyBriefing.split('|||')[1]?.replace('DETAILED:', '') || ''}</ReactMarkdown>
+                         </div>
+                       </div>
+                     )}
                    </div>
                  ) : (
                    <button onClick={handleDailyBriefing} disabled={isGeneratingBriefing} className="w-full bg-white text-black py-3 font-black uppercase flex items-center justify-center gap-2 border-2 border-transparent transition-all active:scale-[0.98]">{isGeneratingBriefing ? <Loader2 className="w-5 h-5 animate-spin"/> : <Sparkles className="w-5 h-5"/>}{isGeneratingBriefing ? "ANALYZING..." : "INITIALIZE REPORT"}</button>
@@ -985,9 +1028,39 @@ export default function App() {
                           <div className="flex items-center gap-2 mb-1 text-purple-600 font-bold uppercase tracking-widest">
                             <BrainCircuit className="w-3 h-3"/> AI Analysis
                           </div>
-                          <div className="prose prose-sm max-w-none leading-relaxed bg-purple-50 p-2 border border-purple-200 text-purple-900">
-                            <ReactMarkdown>{sub.description}</ReactMarkdown>
-                          </div>
+                          {expandedSubAnalysis === sub.id ? (
+                            // Detailed view
+                            <div className="bg-purple-50 p-3 border border-purple-200 text-purple-900 rounded">
+                              <div className="flex justify-between items-start mb-2">
+                                <p className="font-semibold text-sm">
+                                  {sub.description.split('\n\n')[0].replace(/[•\-\*]/g, '').trim()}
+                                </p>
+                                <button 
+                                  onClick={() => setExpandedSubAnalysis(null)}
+                                  className="text-purple-600 hover:text-purple-800 transition-colors"
+                                  title="Collapse"
+                                >
+                                  <ChevronUp className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <div className="prose prose-sm max-w-none mt-3 pt-3 border-t border-purple-200">
+                                <ReactMarkdown>{sub.description}</ReactMarkdown>
+                              </div>
+                            </div>
+                          ) : (
+                            // Short view
+                            <div className="bg-purple-50 p-3 border border-purple-200 text-purple-900 rounded">
+                              <p className="text-sm leading-relaxed mb-2">
+                                {sub.description.split('\n\n')[0].replace(/[•\-\*]/g, '').trim()}
+                              </p>
+                              <button 
+                                onClick={() => setExpandedSubAnalysis(sub.id)}
+                                className="text-xs font-bold uppercase tracking-wider text-purple-600 hover:text-purple-800 flex items-center gap-1 transition-colors"
+                              >
+                                <ChevronDown className="w-3 h-3" /> More Details
+                              </button>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
