@@ -589,7 +589,7 @@ export default function App() {
   const handleAiSubAnalysis = async () => {
     if(!subForm.name?.trim()) return;
     setIsAiGenerating(true);
-    const text = await callGeminiAPI(`Analyze "${subForm.name}" subscription at ${subForm.cost}. Write in natural, professional tone. Use simple numbered points (1., 2., 3.) or hyphens (-). NO asterisks, NO hashtags, NO markdown. Cover: value assessment, cost analysis, alternatives, and recommendation. Be concise and actionable. Language: ${profile.language}`);
+    const text = await callGeminiAPI(`Analyze "${subForm.name}" subscription at ${subForm.cost}. Write 8-12 concise points using numbered format (1., 2., 3.). Total: 150-200 words MAX. Cover: value, cost efficiency, alternatives, recommendation. Be direct and helpful. NO asterisks, NO hashtags, NO markdown. Language: ${profile.language}`);
     setSubForm(p => ({...p, description: text.trim()}));
     setIsAiGenerating(false);
   };
@@ -599,15 +599,15 @@ export default function App() {
     const pendingCount = tasks.filter(t => t.status !== 'done').length;
     const subTotal = totalMonthlyCost.toFixed(0);
     
-    // Generate a short, motivational commander-style message
-    const shortPrompt = `You are a tactical commander briefing your team. ${pendingCount} tasks pending, ${profile.currency}${subTotal} monthly expenses. Give ONE powerful, motivating sentence (max 15 words) about the mission status. Be direct, confident, and inspiring like a military commander. NO markdown symbols. Language: ${profile.language}`;
+    // Generate a short, friendly commander-style message (40-80 words)
+    const shortPrompt = `You are a friendly tactical commander briefing your team. ${pendingCount} tasks pending, ${profile.currency}${subTotal} monthly expenses. Write 40-80 words in a friendly, slightly humorous commander tone - like a cool boss who motivates with wit. Be encouraging but add a touch of humor. Make it feel like a comrade talking, not a robot. NO markdown symbols. Language: ${profile.language}`;
     const shortText = await callGeminiAPI(shortPrompt);
     
-    // Generate detailed analysis in natural professional tone
-    const detailedPrompt = `Professional briefing for ${pendingCount} pending tasks and ${profile.currency}${subTotal} monthly expenses. Write in natural, conversational tone like a professional advisor. Use simple numbered points (1., 2., 3.) or bullet points with hyphens (-). NO asterisks, NO hashtags, NO markdown formatting. Be clear, concise, and actionable. Include: current status, key priorities, recommendations, and next steps. Language: ${profile.language}`;
+    // Generate concise detailed analysis (max 15 points, 200-250 words)
+    const detailedPrompt = `Tactical briefing: ${pendingCount} tasks, ${profile.currency}${subTotal} monthly burn. Write MAXIMUM 15 concise points using numbered format (1., 2., 3.). Total length: 200-250 words MAX. Cover only what's essential: status, priorities, quick wins, risks, action items. Be direct and actionable. NO fluff, NO asterisks, NO hashtags. Language: ${profile.language}`;
     const detailedText = await callGeminiAPI(detailedPrompt);
     
-    // Store both versions separated by a marker (no formatting needed for natural text)
+    // Store both versions separated by a marker
     setDailyBriefing(`SHORT:${shortText.trim()}|||DETAILED:${detailedText.trim()}`);
     setIsGeneratingBriefing(false);
     setShowFullBriefing(false);
