@@ -15,9 +15,7 @@ import {
   getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, 
   query, orderBy, serverTimestamp, setDoc, getDoc
 } from 'firebase/firestore';
-import ReactMarkdown from 'react-markdown';
 import { useRotatingImages, calendarDateImages } from './imageRotation';
-import { formatAIResponse } from './utils/formatting';
 
 // --- CONFIGURATION ---
 
@@ -591,9 +589,8 @@ export default function App() {
   const handleAiSubAnalysis = async () => {
     if(!subForm.name?.trim()) return;
     setIsAiGenerating(true);
-    const text = await callGeminiAPI(`Analyze subscription "${subForm.name}" at ${subForm.cost}. Provide key points: Is it worth it? What are alternatives? Be concise. Language: ${profile.language}`);
-    const formatted = formatAIResponse(text);
-    setSubForm(p => ({...p, description: formatted}));
+    const text = await callGeminiAPI(`Analyze "${subForm.name}" subscription at ${subForm.cost}. Write in natural, professional tone. Use simple numbered points (1., 2., 3.) or hyphens (-). NO asterisks, NO hashtags, NO markdown. Cover: value assessment, cost analysis, alternatives, and recommendation. Be concise and actionable. Language: ${profile.language}`);
+    setSubForm(p => ({...p, description: text.trim()}));
     setIsAiGenerating(false);
   };
 
@@ -603,16 +600,15 @@ export default function App() {
     const subTotal = totalMonthlyCost.toFixed(0);
     
     // Generate a short, motivational commander-style message
-    const shortPrompt = `You are a tactical commander briefing your team. ${pendingCount} tasks pending, ${profile.currency}${subTotal} monthly expenses. Give ONE powerful, motivating sentence (max 15 words) about the mission status. Be direct, confident, and inspiring like a military commander. Language: ${profile.language}`;
+    const shortPrompt = `You are a tactical commander briefing your team. ${pendingCount} tasks pending, ${profile.currency}${subTotal} monthly expenses. Give ONE powerful, motivating sentence (max 15 words) about the mission status. Be direct, confident, and inspiring like a military commander. NO markdown symbols. Language: ${profile.language}`;
     const shortText = await callGeminiAPI(shortPrompt);
     
-    // Generate detailed analysis
-    const detailedPrompt = `Detailed tactical briefing: ${pendingCount} tasks pending, ${profile.currency}${subTotal} monthly burn. Provide strategic analysis with key points, priorities, and actionable recommendations. Use military/tactical language. Be concise but thorough. Language: ${profile.language}`;
+    // Generate detailed analysis in natural professional tone
+    const detailedPrompt = `Professional briefing for ${pendingCount} pending tasks and ${profile.currency}${subTotal} monthly expenses. Write in natural, conversational tone like a professional advisor. Use simple numbered points (1., 2., 3.) or bullet points with hyphens (-). NO asterisks, NO hashtags, NO markdown formatting. Be clear, concise, and actionable. Include: current status, key priorities, recommendations, and next steps. Language: ${profile.language}`;
     const detailedText = await callGeminiAPI(detailedPrompt);
-    const formatted = formatAIResponse(detailedText);
     
-    // Store both versions separated by a marker
-    setDailyBriefing(`SHORT:${shortText.trim()}|||DETAILED:${formatted}`);
+    // Store both versions separated by a marker (no formatting needed for natural text)
+    setDailyBriefing(`SHORT:${shortText.trim()}|||DETAILED:${detailedText.trim()}`);
     setIsGeneratingBriefing(false);
     setShowFullBriefing(false);
   };
@@ -826,7 +822,9 @@ export default function App() {
           <div className="space-y-10">
             {/* Briefing */}
             <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)] relative overflow-hidden group min-h-[200px] flex flex-col justify-between">
-               <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-1000"><img src="/Img/dashboard/banners/294071.jpg" alt="Insight" className="w-full h-full object-cover grayscale" onError={() => handleImageError('dashboardBanner')} /></div>
+               <div className={`absolute inset-0 z-0 opacity-60 transition-all duration-500 ${dailyBriefing ? 'blur-sm' : 'blur-none'}`}>
+                 <img src="/Img/dashboard/banners/294071.jpg" alt="Insight" className="w-full h-full object-cover grayscale" onError={() => handleImageError('dashboardBanner')} />
+               </div>
                <div className="relative z-10 p-5 flex justify-between items-start">
                  <div className="flex items-center gap-2 text-white"><BrainCircuit className="w-6 h-6" /><h3 className="font-black uppercase tracking-[0.2em] text-lg">{t.brief}</h3></div>
                  {dailyBriefing && (
@@ -855,21 +853,20 @@ export default function App() {
                      ) : (
                        // Detailed version
                        <div className="border-l-4 border-white pl-4">
-                         <div className="flex justify-between items-start mb-3">
-                           <p className="text-lg font-bold text-white leading-relaxed">
-                             {dailyBriefing.split('|||')[0].replace('SHORT:', '')}
+                         <p className="text-lg font-bold text-white leading-relaxed mb-3">
+                           {dailyBriefing.split('|||')[0].replace('SHORT:', '')}
+                         </p>
+                         <div className="mt-4 pt-4 border-t border-white/20">
+                           <p className="text-sm text-white/90 leading-relaxed whitespace-pre-line">
+                             {dailyBriefing.split('|||')[1]?.replace('DETAILED:', '') || ''}
                            </p>
-                           <button 
-                             onClick={() => setShowFullBriefing(false)}
-                             className="text-white/80 hover:text-white transition-colors"
-                             title="Collapse"
-                           >
-                             <ChevronUp className="w-5 h-5" />
-                           </button>
                          </div>
-                         <div className="prose prose-invert prose-sm max-w-none mt-4 pt-4 border-t border-white/20">
-                           <ReactMarkdown>{dailyBriefing.split('|||')[1]?.replace('DETAILED:', '') || ''}</ReactMarkdown>
-                         </div>
+                         <button 
+                           onClick={() => setShowFullBriefing(false)}
+                           className="text-xs font-black uppercase tracking-wider text-white/80 hover:text-white flex items-center gap-1 transition-colors mt-3"
+                         >
+                           <ChevronUp className="w-3 h-3" /> Collapse
+                         </button>
                        </div>
                      )}
                    </div>
@@ -1031,27 +1028,24 @@ export default function App() {
                           {expandedSubAnalysis === sub.id ? (
                             // Detailed view
                             <div className="bg-purple-50 p-3 border border-purple-200 text-purple-900 rounded">
-                              <div className="flex justify-between items-start mb-2">
-                                <p className="font-semibold text-sm">
-                                  {sub.description.split('\n\n')[0].replace(/[•\-\*]/g, '').trim()}
-                                </p>
-                                <button 
-                                  onClick={() => setExpandedSubAnalysis(null)}
-                                  className="text-purple-600 hover:text-purple-800 transition-colors"
-                                  title="Collapse"
-                                >
-                                  <ChevronUp className="w-4 h-4" />
-                                </button>
-                              </div>
-                              <div className="prose prose-sm max-w-none mt-3 pt-3 border-t border-purple-200">
-                                <ReactMarkdown>{sub.description}</ReactMarkdown>
-                              </div>
+                              <p className="text-sm leading-relaxed whitespace-pre-line">
+                                {sub.description}
+                              </p>
+                              <button 
+                                onClick={() => setExpandedSubAnalysis(null)}
+                                className="text-xs font-bold uppercase tracking-wider text-purple-600 hover:text-purple-800 flex items-center gap-1 transition-colors mt-3"
+                              >
+                                <ChevronUp className="w-3 h-3" /> Collapse
+                              </button>
                             </div>
                           ) : (
-                            // Short view
+                            // Short view - show first 5 lines
                             <div className="bg-purple-50 p-3 border border-purple-200 text-purple-900 rounded">
-                              <p className="text-sm leading-relaxed mb-2">
-                                {sub.description.split('\n\n')[0].replace(/[•\-\*]/g, '').trim()}
+                              <p className="text-sm leading-relaxed whitespace-pre-line mb-2">
+                                {(() => {
+                                  const lines = sub.description.split('\n').filter(line => line.trim());
+                                  return lines.slice(0, 5).join('\n');
+                                })()}
                               </p>
                               <button 
                                 onClick={() => setExpandedSubAnalysis(sub.id)}
