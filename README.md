@@ -29,7 +29,20 @@
   <br />
   
   <a href="https://autopay-alert-x-tryt.vercel.app/" target="_blank">
-    <img src="./public/og-image.png" alt="AutoPay Alert X Preview" width="100%" style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" />
+    <img src="./public/og-image.png" alt="AutoPay Alert X Desktop Preview" width="100%" style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" />
+  </a>
+  
+  <br />
+  <br />
+  
+  ### 📱 Mobile Experience
+  
+  <p><em>Fully responsive design optimized for all devices</em></p>
+  
+  <br />
+  
+  <a href="https://autopay-alert-x-tryt.vercel.app/" target="_blank">
+    <img src="./public/mobile-preview.jpg" alt="AutoPay Alert X Mobile Preview" width="300px" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);" />
   </a>
   
   <br />
